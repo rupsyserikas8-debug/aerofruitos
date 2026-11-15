@@ -68,13 +68,14 @@ setup_dirs() {
     
     mkdir -p "$SRCDEST" "$LOGDEST" "$BUILDDIR"
     
-    # Ensure builder user can write to project and build dirs (packages, iso, build outputs)
+    # Ensure builder user can write to project and build dirs
     if [[ "$IS_ROOT" == "true" ]]; then
         if ! id builder &>/dev/null; then
             useradd -m -G wheel builder
             echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
         fi
         chown -R builder:builder "$PROJECT_ROOT"
+        chmod -R a+rwX "$PROJECT_ROOT"
     fi
     
     success "Build directories ready"
@@ -87,20 +88,32 @@ build_package() {
     
     log "Building $pkg_name..."
     
-    cd "$pkg_dir"
+    # Copy to writable build location to avoid permission issues on bind mounts
+    local work_dir="$BUILDDIR/$pkg_name"
+    rm -rf "$work_dir"
+    cp -r "$pkg_dir" "$work_dir"
+    
+    if [[ "$IS_ROOT" == "true" ]]; then
+        chown -R builder:builder "$work_dir"
+    fi
+    
+    cd "$work_dir"
     rm -f *.pkg.tar.zst *.pkg.tar.xz *.log
     
     # Run makepkg as builder user if root, otherwise current user
-    local makepkg_cmd="makepkg -sf --noconfirm --skippgpcheck"
+    local makepkg_cmd="PKGDEST='$PKG_DEST' SRCDEST='$SRCDEST' LOGDEST='$LOGDEST' makepkg -sf --noconfirm --skippgpcheck"
     if [[ "$IS_ROOT" == "true" ]]; then
-        makepkg_cmd="sudo -u builder $makepkg_cmd"
-    fi
-    
-    if $makepkg_cmd 2>&1 | tee "$LOGDEST/$pkg_name.log"; then
-        mv *.pkg.tar.zst "$PKG_DEST"/ 2>/dev/null || true
-        success "$pkg_name built successfully"
+        if sudo -u builder bash -c "$makepkg_cmd" 2>&1 | tee "$LOGDEST/$pkg_name.log"; then
+            success "$pkg_name built successfully"
+        else
+            error "Failed to build $pkg_name. Check $LOGDEST/$pkg_name.log"
+        fi
     else
-        error "Failed to build $pkg_name. Check $LOGDEST/$pkg_name.log"
+        if eval "$makepkg_cmd" 2>&1 | tee "$LOGDEST/$pkg_name.log"; then
+            success "$pkg_name built successfully"
+        else
+            error "Failed to build $pkg_name. Check $LOGDEST/$pkg_name.log"
+        fi
     fi
 }
 
