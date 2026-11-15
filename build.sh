@@ -68,13 +68,13 @@ setup_dirs() {
     
     mkdir -p "$SRCDEST" "$LOGDEST" "$BUILDDIR"
     
-    # Ensure builder user can write to ALL build directories (packages, src, build, logs)
+    # Ensure builder user can write to project and build dirs (packages, iso, build outputs)
     if [[ "$IS_ROOT" == "true" ]]; then
         if ! id builder &>/dev/null; then
             useradd -m -G wheel builder
             echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
         fi
-        chown -R builder:builder "$BUILD_DIR"
+        chown -R builder:builder "$PROJECT_ROOT"
     fi
     
     success "Build directories ready"
