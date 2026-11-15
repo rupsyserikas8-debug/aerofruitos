@@ -1,0 +1,284 @@
+# Aerofruitos GTK2 Theme - Frutiger Aero Style
+# Based on the classic Aero glass/translucent aesthetic
+
+# Colors - Frutiger Aero Palette
+AERO_TEAL = "#00B4D8"
+AERO_TEAL_DARK = "#0096C7"
+AERO_TEAL_LIGHT = "#48CAE4"
+AERO_ORANGE = "#FFB700"
+AERO_ORANGE_DARK = "#FFA500"
+AERO_WHITE = "#FFFFFF"
+AERO_WHITE_TRANSLUCENT = "#E0FFFFFF"
+AERO_GLASS = "#C0FFFFFF"
+AERO_GLASS_DARK = "#A0FFFFFF"
+AERO_BG = "#F0F8FF"
+AERO_BG_DARK = "#E0F0F8"
+AERO_TEXT = "#1A1A2E"
+AERO_TEXT_LIGHT = "#4A4A6A"
+AERO_BORDER = "#80D8EF"
+AERO_SHADOW = "#40000000"
+AERO_HIGHLIGHT = "#FFFFFF80"
+AERO_PRESSED = "#FFD70040"
+
+# Style defaults
+style "aerofruitos-default" {
+  # Font
+  font_name = "Segoe UI 10"
+  
+  # Colors
+  fg[NORMAL] = AERO_TEXT
+  fg[PRELIGHT] = AERO_TEAL_DARK
+  fg[ACTIVE] = AERO_WHITE
+  fg[SELECTED] = AERO_WHITE
+  fg[INSENSITIVE] = AERO_TEXT_LIGHT
+  
+  bg[NORMAL] = AERO_BG
+  bg[PRELIGHT] = AERO_TEAL_LIGHT
+  bg[ACTIVE] = AERO_TEAL
+  bg[SELECTED] = AERO_TEAL
+  bg[INSENSITIVE] = AERO_BG_DARK
+  
+  base[NORMAL] = AERO_WHITE
+  base[PRELIGHT] = AERO_WHITE_TRANSLUCENT
+  base[ACTIVE] = AERO_TEAL
+  base[SELECTED] = AERO_TEAL
+  base[INSENSITIVE] = AERO_BG_DARK
+  
+  text[NORMAL] = AERO_TEXT
+  text[PRELIGHT] = AERO_TEXT
+  text[ACTIVE] = AERO_WHITE
+  text[SELECTED] = AERO_WHITE
+  text[INSENSITIVE] = AERO_TEXT_LIGHT
+  
+  # Engine
+  engine "murrine" {
+    animation = TRUE
+    arrowstyle = 1
+    border_shades = { 1.2, 0.8 }
+    colorize_scrollbar = TRUE
+    comboboxstyle = 1
+    contrast = 1.0
+    focusstyle = 2
+    glazestyle = 2
+    gradient_shades = { 1.1, 1.0, 0.95, 0.9 }
+    highlight_shade = 1.3
+    lightborderstyle = 1
+    listviewheaderstyle = 1
+    listviewstyle = 1
+    progressbarstyle = 1
+    reliefstyle = 2
+    roundness = 4
+    scrollbarstyle = 1
+    sliderstyle = 1
+    stepperstyle = 1
+    toolbarstyle = 1
+  }
+}
+
+# Widget class styles
+class "GtkWidget" style "aerofruitos-default"
+
+# Button style - Aero glass buttons
+style "aerofruitos-button" {
+  engine "murrine" {
+    roundness = 6
+    gradient_shades = { 1.15, 1.05, 0.95, 0.85 }
+    highlight_shade = 1.4
+    glazestyle = 2
+    border_shades = { 1.3, 0.7 }
+    lightborder_shade = 1.5
+  }
+  
+  xthickness = 3
+  ythickness = 3
+  
+  fg[NORMAL] = AERO_TEXT
+  fg[PRELIGHT] = AERO_TEAL_DARK
+  fg[ACTIVE] = AERO_WHITE
+  fg[SELECTED] = AERO_WHITE
+  fg[INSENSITIVE] = AERO_TEXT_LIGHT
+  
+  bg[NORMAL] = shade(1.0, AERO_GLASS)
+  bg[PRELIGHT] = shade(1.1, AERO_TEAL)
+  bg[ACTIVE] = shade(0.9, AERO_TEAL)
+  bg[SELECTED] = AERO_TEAL
+  bg[INSENSITIVE] = shade(0.85, AERO_GLASS)
+}
+
+widget_class "*Button*" style "aerofruitos-button"
+widget_class "*button*" style "aerofruitos-button"
+widget_class "*GtkButton*" style "aerofruitos-button"
+
+# Entry style
+style "aerofruitos-entry" {
+  engine "murrine" {
+    roundness = 4
+    gradient_shades = { 1.0, 1.0, 1.0, 1.0 }
+    border_shades = { 1.1, 0.9 }
+  }
+  
+  xthickness = 2
+  ythickness = 2
+  
+  base[NORMAL] = AERO_WHITE
+  base[PRELIGHT] = AERO_WHITE_TRANSLUCENT
+  base[ACTIVE] = AERO_WHITE
+  base[SELECTED] = AERO_TEAL
+  base[INSENSITIVE] = AERO_BG_DARK
+}
+
+widget_class "*Entry*" style "aerofruitos-entry"
+widget_class "*SpinButton*" style "aerofruitos-entry"
+
+# Menu style - glass menus
+style "aerofruitos-menu" {
+  engine "murrine" {
+    roundness = 4
+    gradient_shades = { 1.05, 1.0, 0.98, 0.95 }
+    border_shades = { 1.2, 0.8 }
+  }
+  
+  xthickness = 1
+  ythickness = 1
+  
+  bg[NORMAL] = AERO_GLASS
+  bg[PRELIGHT] = AERO_TEAL_LIGHT
+  bg[SELECTED] = AERO_TEAL
+  fg[SELECTED] = AERO_WHITE
+}
+
+widget_class "*Menu*" style "aerofruitos-menu"
+widget_class "*MenuBar*" style "aerofruitos-menu"
+
+# Panel style - translucent panel
+style "aerofruitos-panel" {
+  engine "murrine" {
+    gradient_shades = { 1.0, 0.98, 0.95, 0.92 }
+    roundness = 0
+    border_shades = { 1.0, 0.9 }
+  }
+  
+  bg[NORMAL] = AERO_GLASS
+  bg[PRELIGHT] = AERO_GLASS_DARK
+}
+
+widget_class "*Panel*" style "aerofruitos-panel"
+widget_class "*XfcePanel*" style "aerofruitos-panel"
+
+# Notebook/Tab style
+style "aerofruitos-notebook" {
+  engine "murrine" {
+    roundness = 4
+    gradient_shades = { 1.05, 1.0, 0.95, 0.9 }
+    tabstyle = 1
+  }
+  
+  xthickness = 4
+  ythickness = 4
+  
+  fg[NORMAL] = AERO_TEXT
+  fg[SELECTED] = AERO_WHITE
+  bg[NORMAL] = AERO_GLASS
+  bg[SELECTED] = AERO_TEAL
+}
+
+widget_class "*Notebook*" style "aerofruitos-notebook"
+
+# Progressbar - Aero style
+style "aerofruitos-progressbar" {
+  engine "murrine" {
+    roundness = 8
+    gradient_shades = { 1.2, 1.1, 1.0, 0.9 }
+    progressbarstyle = 1
+  }
+  
+  fg[PRELIGHT] = AERO_TEAL
+  bg[PRELIGHT] = AERO_TEAL
+}
+
+widget_class "*ProgressBar*" style "aerofruitos-progressbar"
+
+# Scrollbar
+style "aerofruitos-scrollbar" {
+  engine "murrine" {
+    roundness = 6
+    gradient_shades = { 1.0, 0.95, 0.9, 0.85 }
+    scrollbarstyle = 1
+    border_shades = { 1.1, 0.9 }
+  }
+  
+  xthickness = 2
+  ythickness = 2
+  
+  bg[NORMAL] = AERO_GLASS
+  bg[PRELIGHT] = AERO_TEAL_LIGHT
+  bg[ACTIVE] = AERO_TEAL
+}
+
+widget_class "*Scrollbar*" style "aerofruitos-scrollbar"
+
+# Toolbar
+style "aerofruitos-toolbar" {
+  engine "murrine" {
+    gradient_shades = { 1.0, 0.98, 0.95, 0.92 }
+    toolbarstyle = 1
+  }
+  
+  bg[NORMAL] = AERO_GLASS
+}
+
+widget_class "*Toolbar*" style "aerofruitos-toolbar"
+
+# Frame
+style "aerofruitos-frame" {
+  engine "murrine" {
+    roundness = 4
+    gradient_shades = { 1.02, 1.0, 0.98, 0.95 }
+  }
+  
+  fg[NORMAL] = AERO_TEXT_LIGHT
+  bg[NORMAL] = AERO_GLASS
+}
+
+widget_class "*Frame*" style "aerofruitos-frame"
+
+# Statusbar
+style "aerofruitos-statusbar" {
+  engine "murrine" {
+    gradient_shades = { 1.0, 0.98, 0.95, 0.92 }
+  }
+  
+  bg[NORMAL] = AERO_GLASS
+}
+
+widget_class "*Statusbar*" style "aerofruitos-statusbar"
+
+# Tooltip - glass tooltip
+style "aerofruitos-tooltip" {
+  engine "murrine" {
+    roundness = 4
+    gradient_shades = { 1.0, 0.98, 0.95, 0.92 }
+    border_shades = { 1.2, 0.8 }
+  }
+  
+  xthickness = 4
+  ythickness = 3
+  
+  bg[NORMAL] = AERO_GLASS_DARK
+  fg[NORMAL] = AERO_WHITE
+}
+
+widget_class "*Tooltip*" style "aerofruitos-tooltip"
+
+# Focus style
+style "aerofruitos-focus" {
+  fg[SELECTED] = AERO_WHITE
+  bg[SELECTED] = AERO_TEAL
+  
+  engine "murrine" {
+    focusstyle = 2
+    focus_color = AERO_TEAL
+  }
+}
+
+widget_class "*" style "aerofruitos-focus"

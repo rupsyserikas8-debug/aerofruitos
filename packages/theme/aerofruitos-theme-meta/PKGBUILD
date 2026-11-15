@@ -1,0 +1,33 @@
+# Maintainer: Aerofruitos Team
+pkgname=aerofruitos-theme-meta
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Meta-package for complete Aerofruitos Frutiger Aero theme stack'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos-theme'
+license=(GPL3)
+depends=(
+    'aerofruitos-gtk-theme'
+    'aerofruitos-icon-theme'
+    'aerofruitos-cursor-theme'
+    'aerofruitos-fonts'
+    'aerofruitos-wallpapers'
+    'plymouth-theme-aerofruitos'
+    'grub-theme-aerofruitos'
+    'sddm-theme-aerofruitos'
+    'kvantum-qt5'
+    'kvantum-qt6'
+    'qt5ct'
+    'qt6ct'
+)
+optdepends=(
+    'lightdm-gtk-greeter: Alternative display manager'
+    'adw-gtk3: GTK3 fallback for libadwaita apps'
+)
+install=aerofruitos-theme-meta.install
+
+package() {
+  # This is a meta-package, no files to install
+  # All files are installed by dependencies
+  :
+}

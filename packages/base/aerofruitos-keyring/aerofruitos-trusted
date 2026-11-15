@@ -1,0 +1,3 @@
+# Aerofruitos trusted keys
+# Format: keyid:fingerprint:ownertrust
+# Generate with: gpg --list-keys --with-colons

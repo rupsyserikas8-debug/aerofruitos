@@ -1,0 +1,265 @@
+# Maintainer: Aerofruitos Team
+pkgname=aerofruitos-icon-theme
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Frutiger Aero icon theme for Aerofruitos'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos-icon-theme'
+license=(GPL3)
+depends=('hicolor-icon-theme')
+makedepends=('git' 'imagemagick' 'inkscape' 'python')
+source=()
+sha256sums=()
+
+package() {
+  install -dm755 "$pkgdir"/usr/share/icons/Aerofruitos/
+  
+  # Theme index
+  cat > "$pkgdir"/usr/share/icons/Aerofruitos/index.theme << 'EOF'
+[Icon Theme]
+Name=Aerofruitos
+Comment=Frutiger Aero icon theme for Aerofruitos OS
+Inherits=hicolor,Adwaita,gnome
+Directories=apps/scalable,places/scalable,mimetypes/scalable,devices/scalable,emblems/scalable,status/scalable,actions/scalable,categories/scalable
+
+[apps/scalable]
+Size=48
+Context=Applications
+Type=Scalable
+MaxSize=256
+MinSize=16
+
+[places/scalable]
+Size=48
+Context=Places
+Type=Scalable
+MaxSize=256
+MinSize=16
+
+[mimetypes/scalable]
+Size=48
+Context=MimeTypes
+Type=Scalable
+MaxSize=256
+MinSize=16
+
+[devices/scalable]
+Size=48
+Context=Devices
+Type=Scalable
+MaxSize=256
+MinSize=16
+
+[emblems/scalable]
+Size=16
+Context=Emblems
+Type=Scalable
+MaxSize=16
+MinSize=8
+
+[status/scalable]
+Size=16
+Context=Status
+Type=Scalable
+MaxSize=24
+MinSize=8
+
+[actions/scalable]
+Size=16
+Context=Actions
+Type=Scalable
+MaxSize=24
+MinSize=8
+
+[categories/scalable]
+Size=16
+Context=Categories
+Type=Scalable
+MaxSize=24
+MinSize=8
+EOF
+
+  # Create directory structure
+  for dir in apps places mimetypes devices emblems status actions categories; do
+    install -dm755 "$pkgdir"/usr/share/icons/Aerofruitos/${dir}/scalable/
+  done
+  
+  # Generate placeholder icons using a script
+  cat > "$pkgdir"/usr/share/icons/Aerofruitos/generate_icons.sh << 'EOF'
+#!/bin/bash
+# Aerofruitos Icon Generator - Frutiger Aero Style
+# This script generates SVG icons with Aero styling
+
+# Frutiger Aero Colors
+AERO_TEAL="#00B4D8"
+AERO_TEAL_LIGHT="#48CAE4"
+AERO_TEAL_DARK="#0096C7"
+AERO_ORANGE="#FFB700"
+AERO_WHITE="#FFFFFF"
+AERO_GLASS="rgba(255,255,255,0.75)"
+AERO_GLASS_DARK="rgba(255,255,255,0.55)"
+AERO_BG="#1A1A2E"
+AERO_TEXT="#E0E0E0"
+
+# Icon template with Aero glass style
+cat > /tmp/icon_template.svg << 'TEMPLATE'
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Aero glass gradient -->
+    <linearGradient id="glassBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.85" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:0.65" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.45" />
+    </linearGradient>
+    
+    <!-- Aero teal gradient -->
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#48CAE4" />
+      <stop offset="100%" style="stop-color:#00B4D8" />
+    </linearGradient>
+    
+    <!-- Aero orange gradient -->
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB700" />
+      <stop offset="100%" style="stop-color:#FFA500" />
+    </linearGradient>
+    
+    <!-- Inner glow -->
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    
+    <!-- Drop shadow -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with glass effect -->
+  <circle cx="24" cy="24" r="22" fill="url(#glassBg)" stroke="#80D8EF" stroke-width="1.5" filter="url(#dropShadow)"/>
+  
+  <!-- Inner highlight -->
+  <circle cx="24" cy="18" r="18" fill="#FFFFFF" opacity="0.3" filter="url(#innerGlow)"/>
+  
+  <!-- ICON CONTENT GOES HERE -->
+  
+</svg>
+TEMPLATE
+
+# Generate category icons
+generate_category() {
+    local name=$1
+    local color=$2
+    local symbol=$3
+    local file="/usr/share/icons/Aerofruitos/categories/scalable/${name}.svg"
+    
+    cat > "$file" << ICONEOF
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="glassBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.85" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:0.65" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.45" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:${color}" />
+      <stop offset="100%" style="stop-color:${color}CC" />
+    </linearGradient>
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <circle cx="24" cy="24" r="22" fill="url(#glassBg)" stroke="#80D8EF" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <circle cx="24" cy="18" r="18" fill="#FFFFFF" opacity="0.3"/>
+  <text x="24" y="32" font-family="Segoe UI Symbol" font-size="24" fill="url(#accentGrad)" text-anchor="middle" dominant-baseline="middle">${symbol}</text>
+</svg>
+ICONEOF
+}
+
+# Generate app icons
+generate_app() {
+    local name=$1
+    local color=$2
+    local symbol=$3
+    local file="/usr/share/icons/Aerofruitos/apps/scalable/${name}.svg"
+    
+    cat > "$file" << ICONEOF
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="glassBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.85" />
+      <stop offset="50%" style="stop-color:#FFFFFF;stop-opacity:0.65" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.45" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:${color}" />
+      <stop offset="100%" style="stop-color:${color}CC" />
+    </linearGradient>
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <circle cx="24" cy="24" r="22" fill="url(#glassBg)" stroke="#80D8EF" stroke-width="1.5" filter="url(#dropShadow)"/>
+  <circle cx="24" cy="18" r="18" fill="#FFFFFF" opacity="0.3"/>
+  <text x="24" y="32" font-family="Segoe UI Symbol" font-size="24" fill="url(#accentGrad)" text-anchor="middle" dominant-baseline="middle">${symbol}</text>
+</svg>
+ICONEOF
+}
+
+# Generate main categories
+generate_category "preferences-system" "$AERO_TEAL" "⚙"
+generate_category "applications-graphics" "$AERO_ORANGE" "🎨"
+generate_category "applications-internet" "$AERO_TEAL" "🌐"
+generate_category "applications-office" "$AERO_TEAL_DARK" "📄"
+generate_category "applications-multimedia" "$AERO_ORANGE" "🎵"
+generate_category "applications-games" "$AERO_ORANGE" "🎮"
+generate_category "applications-development" "$AERO_TEAL" "💻"
+generate_category "applications-system" "$AERO_TEAL" "🔧"
+generate_category "applications-utilities" "$AERO_TEAL" "🛠"
+generate_category "applications-accessories" "$AERO_TEAL" "📎"
+
+# Generate main apps
+generate_app "org.gnome.Nautilus" "$AERO_TEAL" "📁"
+generate_app "org.gnome.Terminal" "$AERO_TEAL" "💻"
+generate_app "org.gnome.TextEditor" "$AERO_TEAL" "📝"
+generate_app "firefox" "$AERO_ORANGE" "🌐"
+generate_app "code" "$AERO_TEAL" "💻"
+generate_app "libreoffice-writer" "$AERO_TEAL_DARK" "📄"
+generate_app "gimp" "$AERO_ORANGE" "🎨"
+generate_app "vlc" "$AERO_ORANGE" "🎬"
+generate_app "mpv" "$AERO_ORANGE" "🎬"
+generate_app "pavucontrol" "$AERO_TEAL" "🔊"
+generate_app "blueman-manager" "$AERO_TEAL" "📶"
+generate_app "nm-connection-editor" "$AERO_TEAL" "🌐"
+generate_app "gparted" "$AERO_TEAL" "💾"
+generate_app "timeshift" "$AERO_TEAL" "⏪"
+generate_app "xfce4-taskmanager" "$AERO_TEAL" "📊"
+generate_app "xfce4-screenshooter" "$AERO_TEAL" "📸"
+generate_app "xfce4-terminal" "$AERO_TEAL" "💻"
+generate_app "xfce4-whiskermenu" "$AERO_TEAL" "📋"
+generate_app "xfce4-settings" "$AERO_TEAL" "⚙"
+generate_app "xfce4-power-manager" "$AERO_TEAL" "🔋"
+generate_app "xfce4-notifyd" "$AERO_TEAL" "🔔"
+generate_app "alacritty" "$AERO_TEAL" "💻"
+generate_app "rofi" "$AERO_TEAL" "🔍"
+generate_app "nitrogen" "$AERO_TEAL" "🖼"
+generate_app "lxappearance" "$AERO_TEAL" "🎨"
+generate_app "polkit-gnome-authentication-agent-1" "$AERO_TEAL" "🔐"
+
+echo "Generated placeholder Aero icons"
+echo "Replace with actual designed icons for production"
+EOF
+  chmod +x "$pkgdir"/usr/share/icons/Aerofruitos/generate_icons.sh
+  
+  # Run generation
+  cd "$pkgdir"/usr/share/icons/Aerofruitos/
+  ./generate_icons.sh
+  rm generate_icons.sh
+  
+  # Update icon cache
+  gtk-update-icon-cache -f -t "$pkgdir"/usr/share/icons/Aerofruitos/ 2>/dev/null || true
+}

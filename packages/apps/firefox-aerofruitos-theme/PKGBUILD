@@ -1,0 +1,983 @@
+# Maintainer: Aerofruitos Team
+pkgname=firefox-aerofruitos-theme
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Frutiger Aero theme for Firefox (userChrome.css + userContent.css)'
+arch=(any)
+url='https://github.com/aerofruitos/firefox-aerofruitos-theme'
+license=(MPL-2.0)
+depends=('firefox' 'aerofruitos-gtk-theme')
+source=()
+sha256sums=()
+
+package() {
+  install -dm755 "$pkgdir"/usr/lib/firefox/browser/defaults/preferences/
+  install -dm755 "$pkgdir"/usr/share/firefox/chrome/
+  
+  # Firefox preferences to enable userChrome.css
+  cat > "$pkgdir"/usr/lib/firefox/browser/defaults/preferences/aerofruitos-theme.js << 'EOF'
+// Aerofruitos Firefox Theme Preferences
+pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+pref("layers.acceleration.force-enabled", true);
+pref("gfx.webrender.all", true);
+pref("svg.context-properties.content.enabled", true);
+EOF
+
+  # userChrome.css - Aero glass UI for Firefox
+  cat > "$pkgdir"/usr/share/firefox/chrome/userChrome.css << 'EOF'
+/* Aerofruitos Firefox Theme - Frutiger Aero Style */
+/* Place in ~/.mozilla/firefox/<profile>/chrome/userChrome.css */
+/* Enable: about:config -> toolkit.legacyUserProfileCustomizations.stylesheets = true */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Frutiger Aero Color Palette */
+:root {
+  --aero-teal: #00B4D8;
+  --aero-teal-light: #48CAE4;
+  --aero-teal-dark: #0096C7;
+  --aero-orange: #FFB700;
+  --aero-white: #FFFFFF;
+  --aero-glass: rgba(255, 255, 255, 0.75);
+  --aero-glass-dark: rgba(255, 255, 255, 0.55);
+  --aero-bg: #F0F8FF;
+  --aero-bg-dark: #E0F0F8;
+  --aero-text: #1A1A2E;
+  --aero-text-light: #4A4A6A;
+  --aero-border: #80D8EF;
+  --aero-shadow: rgba(0, 0, 0, 0.25);
+  --aero-highlight: rgba(255, 255, 255, 0.5);
+}
+
+/* Main window - glass effect */
+#main-window {
+  background: var(--aero-bg) !important;
+}
+
+#main-window[chromehidden~="toolbar"] #navigator-toolbox {
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border-bottom: 1px solid var(--aero-border) !important;
+  box-shadow: 0 2px 8px var(--aero-shadow) !important;
+}
+
+/* Titlebar - Aero glass */
+#titlebar {
+  background: transparent !important;
+  -moz-appearance: none !important;
+}
+
+#titlebar-buttonbox-container {
+  margin-top: 4px !important;
+}
+
+.titlebar-button {
+  border-radius: 12px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  margin: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  transition: all 100ms ease !important;
+}
+
+.titlebar-button:hover {
+  background: var(--aero-teal) !important;
+  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.4) !important;
+}
+
+.titlebar-button[aria-label="Close"]:hover {
+  background: #DC3545 !important;
+}
+
+/* Tab bar - Aero glass tabs */
+#TabsToolbar {
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border-bottom: 1px solid var(--aero-border) !important;
+  padding-top: 4px !important;
+}
+
+.tab-background {
+  border-radius: 8px 8px 0 0 !important;
+  margin: 0 2px !important;
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-bottom: none !important;
+  transition: all 150ms ease !important;
+}
+
+.tab-background[selected="true"] {
+  background: linear-gradient(to bottom, var(--aero-white), var(--aero-glass)) !important;
+  border-color: var(--aero-teal) !important;
+  box-shadow: 0 -2px 8px rgba(0, 180, 216, 0.2) !important;
+}
+
+.tab-background:hover:not([selected="true"]) {
+  background: linear-gradient(to bottom, var(--aero-teal-light), var(--aero-teal)) !important;
+}
+
+.tab-label {
+  color: var(--aero-text) !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.tab-background[selected="true"] .tab-label {
+  color: var(--aero-teal-dark) !important;
+  font-weight: 600 !important;
+}
+
+.tab-close-button {
+  border-radius: 10px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  margin: 2px !important;
+}
+
+.tab-close-button:hover {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+/* New tab button */
+#tabs-newtab-button {
+  border-radius: 8px !important;
+  margin: 4px !important;
+  background: var(--aero-glass) !important;
+  border: 1px solid var(--aero-border) !important;
+}
+
+#tabs-newtab-button:hover {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+/* Toolbar / Address bar */
+#nav-bar {
+  background: transparent !important;
+  padding: 4px 8px !important;
+}
+
+#urlbar {
+  border-radius: 20px !important;
+  background: var(--aero-white) !important;
+  border: 1px solid var(--aero-border) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  transition: all 120ms ease !important;
+}
+
+#urlbar:hover {
+  border-color: var(--aero-teal-light) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--aero-teal-light) !important;
+}
+
+#urlbar[focused="true"] {
+  border-color: var(--aero-teal) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 180, 216, 0.2) !important;
+}
+
+#urlbar-input {
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 13px !important;
+  color: var(--aero-text) !important;
+}
+
+#identity-box {
+  border-radius: 16px 0 0 16px !important;
+}
+
+#tracking-protection-icon-container {
+  border-radius: 0 16px 16px 0 !important;
+}
+
+/* Toolbar buttons */
+toolbarbutton {
+  border-radius: 8px !important;
+  margin: 0 2px !important;
+  padding: 4px 8px !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--aero-text) !important;
+  transition: all 100ms ease !important;
+}
+
+toolbarbutton:hover {
+  background: var(--aero-glass) !important;
+}
+
+toolbarbutton[open="true"],
+toolbarbutton[checked="true"] {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+/* Bookmarks toolbar */
+#PersonalToolbar {
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border-top: 1px solid var(--aero-border) !important;
+  border-bottom: 1px solid var(--aero-border) !important;
+  padding: 4px !important;
+}
+
+#PersonalToolbar toolbarbutton {
+  border-radius: 6px !important;
+  margin: 2px !important;
+  padding: 4px 10px !important;
+}
+
+#PersonalToolbar toolbarbutton:hover {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+/* Sidebar */
+#sidebar-box {
+  background: var(--aero-glass) !important;
+  border-right: 1px solid var(--aero-border) !important;
+}
+
+#sidebar-header {
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border-bottom: 1px solid var(--aero-border) !important;
+  padding: 8px !important;
+}
+
+#sidebar-header label {
+  color: var(--aero-text) !important;
+  font-weight: 600 !important;
+  font-family: "Segoe UI", sans-serif !important;
+}
+
+.sidebar-placesTree treechildren::-moz-tree-row(selected) {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+.sidebar-placesTree treechildren::-moz-tree-row(hover) {
+  background: var(--aero-teal-light) !important;
+  color: var(--aero-white) !important;
+}
+
+/* Menu popups - Aero glass */
+menupopup,
+popup {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+  padding: 4px 0 !important;
+}
+
+menuitem,
+menu {
+  border-radius: 4px !important;
+  padding: 8px 16px !important;
+  margin: 2px 8px !important;
+  color: var(--aero-text) !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  transition: all 80ms ease !important;
+}
+
+menuitem:hover,
+menu:hover:not([disabled="true"]),
+menu[_moz-menuactive="true"] {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+menuitem[disabled="true"] {
+  opacity: 0.5 !important;
+}
+
+menuseparator {
+  margin: 4px 12px !important;
+  border-top: 1px solid var(--aero-border) !important;
+}
+
+/* Context menus */
+#contentAreaContextMenu {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+}
+
+/* Downloads panel */
+#downloadsPanel {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+}
+
+.downloadMainArea {
+  background: transparent !important;
+}
+
+.downloadContainer {
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+}
+
+.downloadContainer:hover {
+  background: var(--aero-teal-light) !important;
+}
+
+/* Find bar */
+#findbar {
+  background: var(--aero-glass) !important;
+  border-top: 1px solid var(--aero-border) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+#find-input {
+  border-radius: 16px !important;
+  background: var(--aero-white) !important;
+  border: 1px solid var(--aero-border) !important;
+}
+
+/* Developer tools */
+.devtools-toolbox {
+  background: var(--aero-bg) !important;
+}
+
+.devtools-tab {
+  border-radius: 6px 6px 0 0 !important;
+  background: var(--aero-glass) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-bottom: none !important;
+}
+
+.devtools-tab[selected="true"] {
+  background: var(--aero-teal) !important;
+  color: var(--aero-white) !important;
+}
+
+/* Scrollbars */
+scrollbar {
+  background: transparent !important;
+}
+
+scrollbar thumb {
+  background: var(--aero-glass) !important;
+  border: 2px solid transparent !important;
+  background-clip: padding-box !important;
+  border-radius: 6px !important;
+  min-length: 40px !important;
+}
+
+scrollbar thumb:hover {
+  background: var(--aero-teal-light) !important;
+  border-color: var(--aero-teal) !important;
+}
+
+scrollbar thumb:active {
+  background: var(--aero-teal) !important;
+  border-color: var(--aero-teal-dark) !important;
+}
+
+scrollbarbutton {
+  display: none !important;
+}
+
+/* Status panel */
+#statuspanel {
+  border-radius: 6px !important;
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  box-shadow: 0 4px 16px var(--aero-shadow) !important;
+}
+
+#statuspanel-label {
+  color: var(--aero-white) !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+}
+
+/* Notifications */
+.notification-box {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+}
+
+/* Permission prompts */
+#permissionPrompt {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+}
+
+/* Print preview */
+#printPreviewToolbar {
+  background: var(--aero-glass) !important;
+  border-bottom: 1px solid var(--aero-border) !important;
+}
+
+/* Fullscreen warning */
+#fullscreen-warning {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+}
+
+/* Reader mode */
+#readerModeContainer {
+  background: var(--aero-bg) !important;
+}
+
+/* Picture-in-Picture */
+#pictureInPictureWindow {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px var(--aero-shadow) !important;
+  border: 1px solid var(--aero-border) !important;
+}
+
+/* Compact mode adjustments */
+:root[uidensity="compact"] #TabsToolbar {
+  padding-top: 2px !important;
+}
+
+:root[uidensity="compact"] .tab-background {
+  margin: 0 1px !important;
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  :root {
+    --aero-teal: #0077B6;
+    --aero-border: #005F8A;
+    --aero-glass: rgba(255, 255, 255, 0.9);
+    --aero-glass-dark: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+EOF
+
+  # userContent.css - Aero styling for web content
+  cat > "$pkgdir"/usr/share/firefox/chrome/userContent.css << 'EOF'
+/* Aerofruitos Firefox Theme - Web Content Styling */
+/* Place in ~/.mozilla/firefox/<profile>/chrome/userContent.css */
+
+/* Frutiger Aero Color Palette */
+:root {
+  --aero-teal: #00B4D8;
+  --aero-teal-light: #48CAE4;
+  --aero-teal-dark: #0096C7;
+  --aero-orange: #FFB700;
+  --aero-white: #FFFFFF;
+  --aero-glass: rgba(255, 255, 255, 0.75);
+  --aero-glass-dark: rgba(255, 255, 255, 0.55);
+  --aero-bg: #F0F8FF;
+  --aero-bg-dark: #E0F0F8;
+  --aero-text: #1A1A2E;
+  --aero-text-light: #4A4A6A;
+  --aero-border: #80D8EF;
+  --aero-shadow: rgba(0, 0, 0, 0.25);
+}
+
+/* Scrollbars for web content */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--aero-glass);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 5px;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--aero-teal-light);
+  border-color: var(--aero-teal);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--aero-teal);
+  border-color: var(--aero-teal-dark);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Selection */
+::selection {
+  background: var(--aero-teal);
+  color: var(--aero-white);
+}
+
+::-moz-selection {
+  background: var(--aero-teal);
+  color: var(--aero-white);
+}
+
+/* Form elements */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+  border-radius: 6px !important;
+  border: 1px solid var(--aero-border) !important;
+  background: var(--aero-white) !important;
+  color: var(--aero-text) !important;
+  padding: 8px 12px !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 14px !important;
+  transition: all 120ms ease !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--aero-teal) !important;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2) !important;
+  outline: none !important;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--aero-teal-light) !important;
+}
+
+select {
+  background-image: none !important;
+  appearance: none !important;
+  padding-right: 36px !important;
+  background-position: right 8px center !important;
+  background-size: 20px !important;
+}
+
+/* Buttons */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  border-radius: 6px !important;
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  border: 1px solid var(--aero-border) !important;
+  color: var(--aero-text) !important;
+  padding: 8px 16px !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 120ms ease !important;
+  box-shadow: inset 0 1px 0 var(--aero-highlight), 0 1px 3px var(--aero-shadow) !important;
+}
+
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+  background: linear-gradient(to bottom, var(--aero-teal-light), var(--aero-teal)) !important;
+  border-color: var(--aero-teal-dark) !important;
+  color: var(--aero-white) !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 180, 216, 0.4) !important;
+}
+
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+input[type="reset"]:active {
+  background: linear-gradient(to bottom, var(--aero-teal), var(--aero-teal-dark)) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 0 var(--aero-highlight) !important;
+}
+
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus {
+  outline: none !important;
+  box-shadow: inset 0 1px 0 var(--aero-highlight), 0 1px 3px var(--aero-shadow), 0 0 0 2px var(--aero-teal), 0 0 0 4px rgba(0, 180, 216, 0.2) !important;
+}
+
+/* Links */
+a {
+  color: var(--aero-teal) !important;
+  text-decoration: underline !important;
+}
+
+a:hover {
+  color: var(--aero-teal-dark) !important;
+}
+
+a:visited {
+  color: #8A2BE2 !important;
+}
+
+/* Focus visible */
+*:focus-visible {
+  outline: 2px solid var(--aero-teal) !important;
+  outline-offset: 2px !important;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse !important;
+}
+
+th, td {
+  border: 1px solid var(--aero-border) !important;
+  padding: 8px 12px !important;
+}
+
+th {
+  background: linear-gradient(to bottom, var(--aero-glass), var(--aero-glass-dark)) !important;
+  font-weight: 600 !important;
+  color: var(--aero-text) !important;
+}
+
+tr:nth-child(even) {
+  background: rgba(0, 180, 216, 0.03) !important;
+}
+
+tr:hover {
+  background: rgba(0, 180, 216, 0.08) !important;
+}
+
+/* Code/pre */
+code, pre, kbd, samp {
+  font-family: "JetBrains Mono", monospace !important;
+  background: var(--aero-bg-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  color: var(--aero-teal-dark) !important;
+}
+
+pre {
+  padding: 16px !important;
+  overflow: auto !important;
+}
+
+pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 4px solid var(--aero-teal) !important;
+  background: var(--aero-glass) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 12px 16px !important;
+  margin: 16px 0 !important;
+  color: var(--aero-text-light) !important;
+  font-style: italic !important;
+}
+
+/* HR */
+hr {
+  border: none !important;
+  height: 1px !important;
+  background: var(--aero-border) !important;
+  margin: 24px 0 !important;
+}
+
+/* Progress */
+progress {
+  border-radius: 6px !important;
+  background: var(--aero-bg-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  height: 12px !important;
+}
+
+progress::-webkit-progress-bar {
+  border-radius: 6px !important;
+  background: transparent !important;
+}
+
+progress::-webkit-progress-value {
+  border-radius: 6px !important;
+  background: linear-gradient(45deg, var(--aero-teal) 25%, var(--aero-teal-light) 25%, var(--aero-teal-light) 50%, var(--aero-teal) 50%, var(--aero-teal) 75%, var(--aero-teal-light) 75%, var(--aero-teal-light) 100%) !important;
+  background-size: 28px 28px !important;
+  animation: aero-progress 1s linear infinite !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+progress::-moz-progress-bar {
+  border-radius: 6px !important;
+  background: linear-gradient(45deg, var(--aero-teal) 25%, var(--aero-teal-light) 25%, var(--aero-teal-light) 50%, var(--aero-teal) 50%, var(--aero-teal) 75%, var(--aero-teal-light) 75%, var(--aero-teal-light) 100%) !important;
+  background-size: 28px 28px !important;
+  animation: aero-progress 1s linear infinite !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+@keyframes aero-progress {
+  0% { background-position: 0 0; }
+  100% { background-position: 28px 0; }
+}
+
+/* Meter */
+meter {
+  border-radius: 6px !important;
+  background: var(--aero-bg-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  height: 12px !important;
+}
+
+meter::-webkit-meter-optimum-value {
+  border-radius: 6px !important;
+  background: linear-gradient(to right, var(--aero-teal), var(--aero-teal-light)) !important;
+}
+
+meter::-webkit-meter-suboptimum-value {
+  border-radius: 6px !important;
+  background: linear-gradient(to right, var(--aero-orange), #FFA500) !important;
+}
+
+meter::-webkit-meter-even-less-good-value {
+  border-radius: 6px !important;
+  background: linear-gradient(to right, #DC3545, #E05252) !important;
+}
+
+/* Details/Summary */
+details {
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  background: var(--aero-glass) !important;
+  padding: 12px 16px !important;
+  margin: 8px 0 !important;
+}
+
+summary {
+  font-weight: 600 !important;
+  color: var(--aero-teal-dark) !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+summary::-webkit-details-marker {
+  display: none !important;
+}
+
+summary::before {
+  content: "▶ " !important;
+  color: var(--aero-teal) !important;
+  transition: transform 150ms ease !important;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg) !important;
+}
+
+/* Dialog */
+dialog {
+  border: none !important;
+  border-radius: 12px !important;
+  background: var(--aero-glass-dark) !important;
+  box-shadow: 0 16px 48px var(--aero-shadow) !important;
+  padding: 24px !important;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Tooltip */
+[tooltip], [title]:hover::after {
+  background: var(--aero-glass-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 6px !important;
+  color: var(--aero-white) !important;
+  font-family: "Segoe UI", sans-serif !important;
+  font-size: 11px !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 4px 16px var(--aero-shadow) !important;
+}
+
+/* Audio/Video controls */
+audio, video {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px var(--aero-shadow) !important;
+}
+
+/* Range input */
+input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  height: 24px !important;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px !important;
+  border-radius: 3px !important;
+  background: var(--aero-bg-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 10px !important;
+  background: linear-gradient(to bottom, var(--aero-white), var(--aero-glass)) !important;
+  border: 2px solid var(--aero-teal) !important;
+  box-shadow: 0 2px 6px var(--aero-shadow) !important;
+  margin-top: -7px !important;
+  transition: all 100ms ease !important;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: linear-gradient(to bottom, var(--aero-teal-light), var(--aero-teal)) !important;
+  border-color: var(--aero-teal-dark) !important;
+  box-shadow: 0 2px 10px rgba(0, 180, 216, 0.5) !important;
+  transform: scale(1.15) !important;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px !important;
+  border-radius: 3px !important;
+  background: var(--aero-bg-dark) !important;
+  border: 1px solid var(--aero-border) !important;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 10px !important;
+  background: linear-gradient(to bottom, var(--aero-white), var(--aero-glass)) !important;
+  border: 2px solid var(--aero-teal) !important;
+  box-shadow: 0 2px 6px var(--aero-shadow) !important;
+  transition: all 100ms ease !important;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: linear-gradient(to bottom, var(--aero-teal-light), var(--aero-teal)) !important;
+  border-color: var(--aero-teal-dark) !important;
+  box-shadow: 0 2px 10px rgba(0, 180, 216, 0.5) !important;
+  transform: scale(1.15) !important;
+}
+
+/* Checkbox/Radio */
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 2px solid var(--aero-border) !important;
+  background: var(--aero-white) !important;
+  cursor: pointer !important;
+  transition: all 100ms ease !important;
+  vertical-align: middle !important;
+}
+
+input[type="checkbox"] {
+  border-radius: 4px !important;
+}
+
+input[type="radio"] {
+  border-radius: 50% !important;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--aero-teal) !important;
+  border-color: var(--aero-teal) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'/%3E%3C/svg%3E") !important;
+  background-size: 14px !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+input[type="radio"]:checked {
+  background: var(--aero-white) !important;
+  border-color: var(--aero-teal) !important;
+  box-shadow: inset 0 0 0 4px var(--aero-teal) !important;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2) !important;
+}
+
+/* Fieldset/Legend */
+fieldset {
+  border: 1px solid var(--aero-border) !important;
+  border-radius: 8px !important;
+  background: var(--aero-glass) !important;
+  padding: 16px !important;
+  margin: 16px 0 !important;
+}
+
+legend {
+  font-weight: 600 !important;
+  color: var(--aero-teal-dark) !important;
+  padding: 0 8px !important;
+  background: var(--aero-glass) !important;
+}
+
+/* Print adjustments */
+@media print {
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #000 !important;
+    text-shadow: none !important;
+  }
+  
+  a, a:visited {
+    text-decoration: underline !important;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+EOF
+
+  # Install script to apply theme to user profiles
+  cat > "$pkgdir"/usr/bin/aerofruitos-firefox-theme-apply << 'EOF'
+#!/bin/bash
+# Apply Aerofruitos Firefox theme to all user profiles
+
+for profile_dir in ~/.mozilla/firefox/*/; do
+    if [ -d "$profile_dir" ]; then
+        chrome_dir="$profile_dir/chrome"
+        mkdir -p "$chrome_dir"
+        
+        # Copy userChrome.css
+        cp /usr/share/firefox/chrome/userChrome.css "$chrome_dir/" 2>/dev/null
+        
+        # Copy userContent.css
+        cp /usr/share/firefox/chrome/userContent.css "$chrome_dir/" 2>/dev/null
+        
+        echo "Applied theme to $profile_dir"
+    fi
+done
+
+echo "Firefox theme applied. Restart Firefox to see changes."
+echo "Note: Ensure 'toolkit.legacyUserProfileCustomizations.stylesheets' is true in about:config"
+EOF
+  chmod +x "$pkgdir"/usr/bin/aerofruitos-firefox-theme-apply
+}

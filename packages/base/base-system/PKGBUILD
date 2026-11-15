@@ -1,0 +1,104 @@
+# Maintainer: Aerofruitos Team
+pkgname=base-system
+pkgver=20261115
+pkgrel=1
+pkgdesc='Meta-package for Aerofruitos base system'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos'
+license=(GPL)
+depends=(
+  # Base system
+  'base'
+  'linux-aerofruitos'
+  'linux-firmware'
+  'systemd'
+  'systemd-sysvcompat'
+  
+  # Boot
+  'grub'
+  'efibootmgr'
+  'plymouth'
+  
+  # Network
+  'networkmanager'
+  'network-manager-applet'
+  'wireless_tools'
+  'wpa_supplicant'
+  'dhcpcd'
+  'inetutils'
+  'iproute2'
+  
+  # Filesystem tools
+  'e2fsprogs'
+  'dosfstools'
+  'ntfs-3g'
+  'exfatprogs'
+  'btrfs-progs'
+  'f2fs-tools'
+  
+  # Basic utilities
+  'sudo'
+  'vim'
+  'nano'
+  'less'
+  'man-db'
+  'man-pages'
+  'texinfo'
+  'which'
+  'psmisc'
+  'procps-ng'
+  'coreutils'
+  'findutils'
+  'grep'
+  'sed'
+  'gawk'
+  'tar'
+  'gzip'
+  'bzip2'
+  'xz'
+  'zstd'
+  'unzip'
+  'p7zip'
+  
+  # Hardware support
+  'intel-ucode'
+  'amd-ucode'
+  'usbutils'
+  'pciutils'
+  'lsb-release'
+  'hwdetect'
+  'dmidecode'
+  'lshw'
+  
+  # Audio
+  'pipewire'
+  'pipewire-pulse'
+  'wireplumber'
+  'alsa-utils'
+  'alsa-firmware'
+  'pavucontrol'
+  
+  # Bluetooth
+  'bluez'
+  'bluez-utils'
+  'blueman'
+  
+  # Printing
+  'cups'
+  'cups-pdf'
+  'system-config-printer'
+  
+  # Time
+  'ntp'
+  'chrony'
+)
+
+optdepends=(
+  'nvidia-340xx: NVIDIA driver for GT9600 (AUR)'
+  'nvidia-340xx-dkms: NVIDIA DKMS driver for GT9600 (AUR)'
+  'mesa: OpenGL support for Nouveau'
+  'vulkan-radeon: Vulkan for AMD'
+  'vulkan-intel: Vulkan for Intel'
+)
+
+install=base-system.install

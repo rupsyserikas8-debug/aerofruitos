@@ -1,0 +1,141 @@
+# Aerofruitos XFWM4 Theme - Frutiger Aero Window Decorations
+# Based on the classic Aero glass window borders
+
+# Version
+version=1.0
+name=Aerofruitos
+author=Aerofruitos Team
+copyright=GPL v3
+date=2026-11-15
+
+# Window corner radius
+corner_radius=8
+
+# Border width
+border_width=4
+
+# Title bar height
+title_height=32
+
+# Button spacing
+button_spacing=4
+button_offset=8
+
+# Colors - Frutiger Aero
+# Active window
+active_text_color=#1A1A2E
+active_text_shadow_color=#FFFFFF80
+active_border_color=#80D8EF
+active_title_bg_color=#C0FFFFFF
+active_title_bg_gradient_color=#A0FFFFFF
+active_button_bg_color=#C0FFFFFF
+active_button_bg_gradient_color=#A0FFFFFF
+active_button_border_color=#80D8EF
+active_button_text_color=#1A1A2E
+
+# Inactive window
+inactive_text_color=#4A4A6A
+inactive_text_shadow_color=#FFFFFF80
+inactive_border_color=#80D8EF80
+inactive_title_bg_color=#E0F0F8
+inactive_title_bg_gradient_color=#D0E8F0
+inactive_button_bg_color=#E0F0F8
+inactive_button_bg_gradient_color=#D0E8F0
+inactive_button_border_color=#80D8EF80
+inactive_button_text_color=#4A4A6A
+
+# Prelight (hover)
+prelight_button_bg_color=#48CAE4
+prelight_button_bg_gradient_color=#00B4D8
+prelight_button_border_color=#0096C7
+prelight_button_text_color=#FFFFFF
+
+# Pressed
+pressed_button_bg_color=#0096C7
+pressed_button_bg_gradient_color=#0077B6
+pressed_button_border_color=#005F8A
+pressed_button_text_color=#FFFFFF
+
+# Close button special colors
+close_prelight_bg_color=#DC3545
+close_prelight_bg_gradient_color=#C82333
+close_prelight_border_color=#A71E2A
+close_prelight_text_color=#FFFFFF
+
+close_pressed_bg_color=#A71E2A
+close_pressed_bg_gradient_color=#8B1A22
+close_pressed_border_color=#72161C
+close_pressed_text_color=#FFFFFF
+
+# Maximize button special colors
+maximize_prelight_bg_color=#00B4D8
+maximize_prelight_bg_gradient_color=#0096C7
+maximize_prelight_border_color=#0077B6
+maximize_prelight_text_color=#FFFFFF
+
+# Minimize button special colors
+minimize_prelight_bg_color=#00B4D8
+minimize_prelight_bg_gradient_color=#0096C7
+minimize_prelight_border_color=#0077B6
+minimize_prelight_text_color=#FFFFFF
+
+# Hide button special colors
+hide_prelight_bg_color=#00B4D8
+hide_prelight_bg_gradient_color=#0096C7
+hide_prelight_border_color=#0077B6
+hide_prelight_text_color=#FFFFFF
+
+# Stick button special colors
+stick_prelight_bg_color=#00B4D8
+stick_prelight_bg_gradient_color=#0096C7
+stick_prelight_border_color=#0077B6
+stick_prelight_text_color=#FFFFFF
+
+# Shade button special colors
+shade_prelight_bg_color=#00B4D8
+shade_prelight_bg_gradient_color=#0096C7
+shade_prelight_border_color=#0077B6
+shade_prelight_text_color=#FFFFFF
+
+# Title alignment
+title_alignment=center
+
+# Title offset
+title_offset_x=0
+title_offset_y=0
+
+# Button layout (CLMIRS = Close, Left, Maximize, Icon, Right, Stick, Shade)
+button_layout=O|CMHS
+
+# Shadow
+show_shadow=true
+shadow_delta_x=0
+shadow_delta_y=4
+shadow_opacity=60
+shadow_color=#000000
+
+# Blur (compositor)
+blur_background=true
+blur_strength=10
+
+# Glow
+active_glow=true
+active_glow_color=#00B4D8
+active_glow_size=8
+active_glow_opacity=80
+
+inactive_glow=false
+
+# Animation
+animate_buttons=true
+animation_duration=150
+
+# Title font
+title_font=Segoe UI Bold 10
+
+# Button size
+button_width=24
+button_height=24
+
+# Full width title bar
+full_width_title=true

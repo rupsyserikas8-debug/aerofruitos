@@ -1,0 +1,307 @@
+# Maintainer: Aerofruitos Team
+pkgname=aerofruitos-cursor-theme
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Frutiger Aero cursor theme for Aerofruitos'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos-cursor-theme'
+license=(GPL3)
+depends=()
+source=()
+sha256sums=()
+
+package() {
+  install -dm755 "$pkgdir"/usr/share/icons/Aerofruitos/cursors/
+  
+  # Create cursor theme index
+  cat > "$pkgdir"/usr/share/icons/Aerofruitos/index.theme << 'EOF'
+[Icon Theme]
+Name=Aerofruitos
+Comment=Frutiger Aero cursor theme for Aerofruitos OS
+Inherits=Adwaita
+EOF
+  
+  # Create cursor configuration
+  cat > "$pkgdir"/usr/share/icons/Aerofruitos/cursor.theme << 'EOF'
+[Cursor Theme]
+Name=Aerofruitos
+Comment=Frutiger Aero cursor theme
+Inherits=Adwaita
+Size=24
+EOF
+  
+  # Generate X11 cursor files using xcursorgen
+  cat > "$pkgdir"/usr/share/icons/Aerofruitos/cursors/generate_cursors.sh << 'EOF'
+#!/bin/bash
+# Aerofruitos Cursor Generator - Frutiger Aero Style
+# Generates .cursor files from PNG sources using xcursorgen
+
+# Colors
+AERO_TEAL="#00B4D8"
+AERO_TEAL_LIGHT="#48CAE4"
+AERO_WHITE="#FFFFFF"
+AERO_GLASS="rgba(255,255,255,0.8)"
+AERO_SHADOW="rgba(0,0,0,0.3)"
+
+# Create source directory
+mkdir -p /tmp/aero_cursors_src
+cd /tmp/aero_cursors_src
+
+# Cursor configurations: name hotspot_x hotspot_y size
+# Using SVG generation for crisp cursors at any size
+
+cat > default.svg << 'SVGEOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#48CAE4"/>
+      <stop offset="100%" style="stop-color:#00B4D8"/>
+    </linearGradient>
+    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+  <!-- Arrow pointer -->
+  <path d="M8 8 L16 16 L8 24 L10 22 L16 16 L10 10 Z" 
+        fill="url(#tealGrad)" stroke="#0096C7" stroke-width="1.5" filter="url(#shadow)"/>
+  <path d="M8 8 L16 16 L8 24" fill="none" stroke="#FFFFFF" stroke-width="0.5" opacity="0.5"/>
+</svg>
+SVGEOF
+
+# Convert SVG to PNG for each cursor size
+for size in 16 24 32 48 64; do
+    inkscape -w $size -h $size default.svg -o default_${size}.png 2>/dev/null || {
+        # Fallback: create simple PNG with ImageMagick
+        convert -size ${size}x${size} xc:none \
+            -fill "#00B4D8" -stroke "#0096C7" -stroke-width 1 \
+            -draw "polygon 4,4 8,8 4,12 5,11 8,8 5,5" \
+            -shadow "60x3+1+2" default_${size}.png 2>/dev/null || true
+    }
+done
+
+# Cursor definition files for xcursorgen
+# Format: size hotspot_x hotspot_y filename.png
+
+# Default/Arrow
+cat > default.cursor << 'CURSOREOF'
+16 3 3 default_16.png
+24 5 5 default_24.png
+32 6 6 default_32.png
+48 9 9 default_48.png
+64 12 12 default_64.png
+CURSOREOF
+
+# Context menu
+cat > context_menu.cursor << 'CURSOREOF'
+16 3 3 default_16.png
+24 5 5 default_24.png
+32 6 6 default_32.png
+CURSOREOF
+
+# Pointer
+cat > pointer.cursor << 'CURSOREOF'
+16 3 3 default_16.png
+24 5 5 default_24.png
+32 6 6 default_32.png
+48 9 9 default_48.png
+CURSOREOF
+
+# Text/I-beam
+cat > text.cursor << 'CURSOREOF'
+16 7 8 text_16.png
+24 11 12 text_24.png
+32 14 16 text_32.png
+CURSOREOF
+
+# Wait/Busy
+cat > wait.cursor << 'CURSOREOF'
+16 8 8 wait_16.png
+24 12 12 wait_24.png
+32 16 16 wait_32.png
+CURSOREOF
+
+# Progress
+cat > progress.cursor << 'CURSOREOF'
+16 8 8 progress_16.png
+24 12 12 progress_24.png
+32 16 16 progress_32.png
+CURSOREOF
+
+# Crosshair
+cat > crosshair.cursor << 'CURSOREOF'
+16 8 8 cross_16.png
+24 12 12 cross_24.png
+32 16 16 cross_32.png
+CURSOREOF
+
+# Move
+cat > move.cursor << 'CURSOREOF'
+16 8 8 move_16.png
+24 12 12 move_24.png
+32 16 16 move_32.png
+CURSOREOF
+
+# Resize cursors
+for dir in n s e w ne nw se sw ns ew nwse nesw; do
+    cat > ${dir}-resize.cursor << CURSOREOF
+16 8 8 ${dir}_16.png
+24 12 12 ${dir}_24.png
+32 16 16 ${dir}_32.png
+CURSOREOF
+done
+
+# Hand/Link
+cat > hand.cursor << 'CURSOREOF'
+16 8 8 hand_16.png
+24 12 12 hand_24.png
+32 16 16 hand_32.png
+CURSOREOF
+
+cat > hand2.cursor << 'CURSOREOF'
+16 8 8 hand_16.png
+24 12 12 hand_24.png
+32 16 16 hand_32.png
+CURSOREOF
+
+# Not allowed
+cat > not_allowed.cursor << 'CURSOREOF'
+16 8 8 not_allowed_16.png
+24 12 12 not_allowed_24.png
+32 16 16 not_allowed_32.png
+CURSOREOF
+
+# Copy
+cat > copy.cursor << 'CURSOREOF'
+16 8 8 copy_16.png
+24 12 12 copy_24.png
+32 16 16 copy_32.png
+CURSOREOF
+
+# Alias/Link
+cat > alias.cursor << 'CURSOREOF'
+16 8 8 alias_16.png
+24 12 12 alias_24.png
+32 16 16 alias_32.png
+CURSOREOF
+
+# Cell (spreadsheet)
+cat > cell.cursor << 'CURSOREOF'
+16 8 8 cell_16.png
+24 12 12 cell_24.png
+32 16 16 cell_32.png
+CURSOREOF
+
+# Vertical text
+cat > vertical_text.cursor << 'CURSOREOF'
+16 8 8 vtext_16.png
+24 12 12 vtext_24.png
+32 16 16 vtext_32.png
+CURSOREOF
+
+# Zoom in/out
+cat > zoom_in.cursor << 'CURSOREOF'
+16 8 8 zoom_in_16.png
+24 12 12 zoom_in_24.png
+32 16 16 zoom_in_32.png
+CURSOREOF
+
+cat > zoom_out.cursor << 'CURSOREOF'
+16 8 8 zoom_out_16.png
+24 12 12 zoom_out_24.png
+32 16 16 zoom_out_32.png
+CURSOREOF
+
+# Help
+cat > help.cursor << 'CURSOREOF'
+16 8 8 help_16.png
+24 12 12 help_24.png
+32 16 16 help_32.png
+CURSOREOF
+
+# Generate all cursors
+echo "Generating cursor files..."
+for cursor in *.cursor; do
+    name=$(basename "$cursor" .cursor)
+    xcursorgen "$cursor" "/usr/share/icons/Aerofruitos/cursors/$name" 2>/dev/null || echo "Warning: Failed to generate $name"
+done
+
+# Create symlinks for standard cursor names
+cd /usr/share/icons/Aerofruitos/cursors/
+ln -sf default left_ptr
+ln -sf default top_left_arrow
+ln -sf text xterm
+ln -sf text ibeam
+ln -sf wait watch
+ln -sf progress left_ptr_watch
+ln -sf hand pointer
+ln -sf hand2 pointing_hand
+ln -sf move move
+ln -sf not_allowed circle
+ln -sf copy copy
+ln -sf alias link
+ln -sf crosshair cross
+ln -sf n-resize sb_v_double_arrow
+ln -sf s-resize sb_v_double_arrow
+ln -sf e-resize sb_h_double_arrow
+ln -sf w-resize sb_h_double_arrow
+ln -sf ne-resize fd_double_arrow
+ln -sf nw-resize bd_double_arrow
+ln -sf se-resize bd_double_arrow
+ln -sf sw-resize fd_double_arrow
+ln -sf ns-resize sb_v_double_arrow
+ln -sf ew-resize sb_h_double_arrow
+ln -sf nwse-resize bd_double_arrow
+ln -sf nesw-resize fd_double_arrow
+ln -sf zoom_in zoom_in
+ln -sf zoom_out zoom_out
+ln -sf help help
+ln -sf context_menu context_menu
+
+echo "Cursor generation complete"
+EOF
+  chmod +x "$pkgdir"/usr/share/icons/Aerofruitos/cursors/generate_cursors.sh
+  
+  # Note: In actual build, this would be run in a clean build environment
+  # with inkscape, imagemagick, and xcursorgen available
+  # For now, create placeholder cursor files
+  for cursor in default text wait progress crosshair move hand hand2 not_allowed copy alias cell vertical_text zoom_in zoom_out help context_menu pointer; do
+    touch "$pkgdir"/usr/share/icons/Aerofruitos/cursors/$cursor
+  done
+  
+  # Symlinks
+  cd "$pkgdir"/usr/share/icons/Aerofruitos/cursors/
+  ln -sf default left_ptr
+  ln -sf default top_left_arrow
+  ln -sf text xterm
+  ln -sf text ibeam
+  ln -sf wait watch
+  ln -sf progress left_ptr_watch
+  ln -sf hand pointer
+  ln -sf hand2 pointing_hand
+  ln -sf move move
+  ln -sf not_allowed circle
+  ln -sf copy copy
+  ln -sf alias link
+  ln -sf crosshair cross
+  ln -sf n-resize sb_v_double_arrow
+  ln -sf s-resize sb_v_double_arrow
+  ln -sf e-resize sb_h_double_arrow
+  ln -sf w-resize sb_h_double_arrow
+  ln -sf ne-resize fd_double_arrow
+  ln -sf nw-resize bd_double_arrow
+  ln -sf se-resize bd_double_arrow
+  ln -sf sw-resize fd_double_arrow
+  ln -sf ns-resize sb_v_double_arrow
+  ln -sf ew-resize sb_h_double_arrow
+  ln -sf nwse-resize bd_double_arrow
+  ln -sf nesw-resize fd_double_arrow
+  ln -sf zoom_in zoom_in
+  ln -sf zoom_out zoom_out
+  ln -sf help help
+  ln -sf context_menu context_menu
+}

@@ -1,0 +1,119 @@
+# Maintainer: Aerofruitos Team
+pkgbase=linux-aerofruitos
+pkgver=6.6.52
+pkgrel=1
+pkgdesc='Linux kernel optimized for Aerofruitos (Q6600/GT9600/2GB RAM)'
+arch=(x86_64)
+url='https://kernel.org'
+license=(GPL2)
+makedepends=(xmlto kmod inetutils bc libelf cpio perl tar xz)
+options=('!strip')
+_srcname=linux-${pkgver}
+source=(
+  "https://cdn.kernel.org/pub/linux/kernel/v6.x/${_srcname}.tar.xz"
+  "https://cdn.kernel.org/pub/linux/kernel/v6.x/${_srcname}.tar.sign"
+  "config.aerofruitos"
+  "linux-aerofruitos.preset"
+)
+validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886' '647F28654894E3BD457199BE38DBBDC86092693E')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+export KBUILD_BUILD_HOST=aerofruitos
+export KBUILD_BUILD_USER=builder
+export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
+
+prepare() {
+  cd $_srcname
+  cp ../config.aerofruitos .config
+  make olddefconfig
+  make -s kernelrelease > version
+}
+
+build() {
+  cd $_srcname
+  make all
+  make -C tools/objtool
+}
+
+_package() {
+  pkgdesc='The Linux kernel and modules with Aerofruitos optimizations'
+  depends=(coreutils kmod initramfs)
+  optdepends=('wireless-regdb: wireless regulatory database'
+              'linux-firmware: firmware for hardware')
+  provides=(linux KSMBD-MODULE VIRTIO-MODULE WIREGUARD-MODULE)
+  replaces=(linux-lts)
+
+  cd $_srcname
+  local kernver="$(<version)"
+  local modulesdir="$pkgdir/usr/lib/modules/$kernver"
+
+  msg2 "Installing boot image..."
+  install -Dm644 arch/x86/boot/bzImage "$modulesdir/vmlinuz"
+
+  msg2 "Installing modules..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
+
+  msg2 "Installing pkgbase..."
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
+
+  msg2 "Removing build and source links..."
+  rm "$modulesdir"/{source,build}
+}
+
+_package-headers() {
+  pkgdesc='Headers and scripts for building modules for Linux kernel (Aerofruitos)'
+  depends=(pahole)
+
+  cd $_srcname
+  local kernver="$(<version)"
+  local builddir="$pkgdir/usr/lib/modules/$kernver/build"
+
+  msg2 "Installing build files..."
+  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map version vmlinux
+  install -Dt "$builddir/kernel" -m644 kernel/Makefile
+  install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
+  cp -t "$builddir" -a scripts
+
+  msg2 "Installing headers..."
+  cp -t "$builddir" -a include
+  cp -t "$builddir/arch/x86" -a arch/x86/include
+  install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
+
+  msg2 "Installing Kconfig files..."
+  find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
+
+  msg2 "Removing unneeded architectures..."
+  local arch
+  for arch in "$builddir"/arch/*/; do
+    [[ $arch = */x86/ ]] && continue
+    rm -r "$arch"
+  done
+
+  msg2 "Removing documentation..."
+  rm -r "$builddir/Documentation"
+
+  msg2 "Removing broken symlinks..."
+  find -L "$builddir" -type l -printf 'Removing %p\n' -delete
+
+  msg2 "Removing loose objects..."
+  find "$builddir" -type f -name '*.o' -printf 'Removing %p\n' -delete
+
+  msg2 "Stripping build tools..."
+  local file
+  while read -rd '' file; do
+    case "$(file -bi "$file")" in
+      application/x-sharedlib\;*) strip -v $STRIP_SHARED "$file" ;;
+      application/x-archive\;*) strip -v $STRIP_STATIC "$file" ;;
+      application/x-executable\;*) strip -v $STRIP_BINARIES "$file" ;;
+      application/x-pie-executable\;*) strip -v $STRIP_BINARIES "$file" ;;
+    esac
+  done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
+}
+
+pkgname=("$pkgbase" "$pkgbase-headers")
+for _p in "${pkgname[@]}"; do
+  eval "package_$_p() {
+    $(declare -f "_package${_p#$pkgbase}")
+    _package${_p#$pkgbase}
+  }"
+done

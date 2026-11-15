@@ -1,0 +1,62 @@
+# Aerofruitos OS - Frutiger Aero Edition
+# Build Requirements for Linux (Arch-based)
+
+# Base system
+base
+base-devel
+linux-headers
+
+# Build tools
+archiso
+mkinitcpio-archiso
+git
+python
+python-textual
+
+# Kernel build
+xmlto
+kmod
+inetutils
+bc
+libelf
+cpio
+perl
+tar
+xz
+
+# Theme build
+gtk3
+gtk4
+gtk-engine-murrine
+gtk-engines
+sassc
+meson
+imagemagick
+inkscape
+xcursorgen
+
+# Font tools
+fontconfig
+unzip
+
+# ISO testing
+qemu
+qemu-system-x86
+virt-manager
+ovmf
+
+# USB tools
+dosfstools
+gptfdisk
+parted
+cryptsetup
+lvm2
+btrfs-progs
+f2fs-tools
+
+# Network
+networkmanager
+network-manager-applet
+
+# Optional: AUR helper
+# yay (install manually)

@@ -1,0 +1,27 @@
+post_install() {
+  # Enable essential services
+  systemctl enable NetworkManager.service
+  systemctl enable systemd-timesyncd.service
+  systemctl enable fstrim.timer
+  systemctl enable plymouth-start.service
+  
+  # Set up Plymouth for GRUB
+  if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    plymouth-set-default-theme aerofruitos -R
+  fi
+  
+  # Regenerate initramfs
+  mkinitcpio -P linux-aerofruitos
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  # Disable services on removal
+  systemctl disable NetworkManager.service
+  systemctl disable systemd-timesyncd.service
+  systemctl disable fstrim.timer
+  systemctl disable plymouth-start.service
+}

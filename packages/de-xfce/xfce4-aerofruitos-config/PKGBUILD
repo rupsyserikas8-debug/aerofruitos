@@ -1,0 +1,797 @@
+# Maintainer: Aerofruitos Team
+pkgname=xfce4-aerofruitos-config
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='XFCE configuration for Aerofruitos Frutiger Aero theme'
+arch=(any)
+url='https://github.com/aerofruitos/xfce4-aerofruitos-config'
+license=(GPL3)
+depends=('xfce4-panel' 'xfce4-session' 'xfce4-settings' 'xfwm4' 'thunar'
+         'xfce4-whiskermenu-plugin' 'xfce4-pulseaudio-plugin' 'xfce4-battery-plugin'
+         'xfce4-datetime-plugin' 'xfce4-notifyd' 'xfce4-power-manager'
+         'xfce4-screenshooter' 'xfce4-taskmanager' 'xfce4-terminal'
+         'aerofruitos-gtk-theme' 'aerofruitos-icon-theme' 'aerofruitos-cursor-theme'
+         'aerofruitos-fonts' 'aerofruitos-wallpapers')
+source=()
+sha256sums=()
+
+package() {
+  # XFCE Panel configuration
+  install -dm755 "$pkgdir"/etc/xdg/xfce4/panel
+  cat > "$pkgdir"/etc/xdg/xfce4/panel/default.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-panel" version="1.0">
+  <property name="panels" type="array">
+    <value type="int" value="1"/>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=6;x=0;y=0"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="length-adjust" type="bool" value="true"/>
+      <property name="size" type="uint" value="36"/>
+      <property name="autohide" type="bool" value="false"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-image" type="string" value=""/>
+      <property name="background-color" type="string" value="#C0FFFFFF"/>
+      <property name="border-color" type="string" value="#80D8EF"/>
+      <property name="enter-opacity" type="uint" value="99"/>
+      <property name="leave-opacity" type="uint" value="85"/>
+      <property name="plugins" type="array">
+        <value type="int" value="1"/>
+        <value type="int" value="2"/>
+        <value type="int" value="3"/>
+        <value type="int" value="4"/>
+        <value type="int" value="5"/>
+        <value type="int" value="6"/>
+        <value type="int" value="7"/>
+        <value type="int" value="8"/>
+        <value type="int" value="9"/>
+        <property name="plugin-1" type="string" value="whiskermenu"/>
+        <property name="plugin-2" type="string" value="separator"/>
+        <property name="plugin-3" type="string" value="tasklist"/>
+        <property name="plugin-4" type="string" value="separator"/>
+        <property name="plugin-5" type="string" value="systray"/>
+        <property name="plugin-6" type="string" value="pulseaudio"/>
+        <property name="plugin-7" type="string" value="battery"/>
+        <property name="plugin-8" type="string" value="datetime"/>
+        <property name="plugin-9" type="string" value="actions"/>
+      </property>
+    </property>
+  </property>
+  <property name="plugins" type="array">
+    <value type="int" value="1"/>
+    <value type="int" value="2"/>
+    <value type="int" value="3"/>
+    <value type="int" value="4"/>
+    <value type="int" value="5"/>
+    <value type="int" value="6"/>
+    <value type="int" value="7"/>
+    <value type="int" value="8"/>
+    <value type="int" value="9"/>
+    <property name="plugin-1" type="empty">
+      <property name="whiskermenu" type="empty">
+        <property name="button-title" type="string" value=""/>
+        <property name="button-icon" type="string" value="aerofruitos-logo"/>
+        <property name="menu-width" type="int" value="550"/>
+        <property name="menu-height" type="int" value="500"/>
+        <property name="menu-opacity" type="double" value="0.95"/>
+        <property name="categories-icon-size" type="int" value="24"/>
+        <property name="recent-items" type="int" value="5"/>
+        <property name="command" type="string" value="exo-open --launch TerminalEmulator"/>
+      </property>
+    </property>
+    <property name="plugin-2" type="empty">
+      <property name="separator" type="empty">
+        <property name="style" type="uint" value="0"/>
+        <property name="expand" type="bool" value="false"/>
+      </property>
+    </property>
+    <property name="plugin-3" type="empty">
+      <property name="tasklist" type="empty">
+        <property name="show-handle" type="bool" value="false"/>
+        <property name="show-labels" type="bool" value="true"/>
+        <property name="show-wireframes" type="bool" value="false"/>
+        <property name="grouping" type="uint" value="1"/>
+        <property name="sort-order" type="uint" value="0"/>
+        <property name="include-all-workspaces" type="bool" value="false"/>
+        <property name="include-minimized" type="bool" value="true"/>
+        <property name="flat-buttons" type="bool" value="true"/>
+        <property name="switch-workspace-on-unminimize" type="bool" value="true"/>
+      </property>
+    </property>
+    <property name="plugin-4" type="empty">
+      <property name="separator" type="empty">
+        <property name="style" type="uint" value="0"/>
+        <property name="expand" type="bool" value="true"/>
+      </property>
+    </property>
+    <property name="plugin-5" type="empty">
+      <property name="systray" type="empty">
+        <property name="names-visible" type="array"/>
+        <property name="hidden" type="array"/>
+        <property name="icon-size" type="uint" value="22"/>
+        <property name="square-icons" type="bool" value="true"/>
+      </property>
+    </property>
+    <property name="plugin-6" type="empty">
+      <property name="pulseaudio" type="empty">
+        <property name="show-notifications" type="bool" value="true"/>
+        <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      </property>
+    </property>
+    <property name="plugin-7" type="empty">
+      <property name="battery" type="empty">
+        <property name="show-percentage" type="bool" value="true"/>
+        <property name="show-time" type="bool" value="true"/>
+        <property name="show-frame" type="bool" value="true"/>
+        <property name="icon-theme" type="string" value="Aerofruitos"/>
+      </property>
+    </property>
+    <property name="plugin-8" type="empty">
+      <property name="datetime" type="empty">
+        <property name="format" type="string" value="%a %b %d, %H:%M"/>
+        <property name="tooltip-format" type="string" value="%A, %B %d, %Y%n%H:%M:%S"/>
+      </property>
+    </property>
+    <property name="plugin-9" type="empty">
+      <property name="actions" type="empty">
+        <property name="appearance" type="uint" value="1"/>
+        <property name="items" type="array">
+          <value type="string" value="Lock Screen"/>
+          <value type="string" value="Switch User"/>
+          <value type="string" value="Suspend"/>
+          <value type="string" value="Hibernate"/>
+          <value type="string" value="Restart"/>
+          <value type="string" value="Shut Down"/>
+          <value type="string" value="Log Out"/>
+        </property>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+
+  # XFWM4 configuration
+  install -dm755 "$pkgdir"/etc/xdg/xfce4/xfwm4
+  cat > "$pkgdir"/etc/xdg/xfce4/xfwm4/xfwm4rc << 'EOF'
+[General]
+theme=Aerofruitos
+button_layout=O|CMHS
+title_alignment=center
+title_font=Segoe UI Bold 10
+title_shadow_active=true
+title_shadow_inactive=false
+title_shadow_color=#FFFFFF80
+shadow_delta_x=0
+shadow_delta_y=4
+shadow_opacity=60
+shadow_color=#000000
+zoom_desktop=false
+wrap_windows=true
+wrap_workspaces=true
+wrap_resistance=10
+snap_to_border=true
+snap_to_windows=true
+snap_resistance=10
+raise_on_click=true
+raise_on_focus=false
+focus_new=true
+focus_stealing_prevention=1
+click_to_focus=true
+click_to_focus_delay=200
+auto_raise=false
+auto_raise_delay=250
+cycle_draw_frame=true
+cycle_raise=true
+cycle_hidden=true
+cycle_minimized=true
+cycle_tabwin_mode=1
+cycle_preview=true
+cycle_workspaces=true
+cycle_panels=false
+cycle_desktops=false
+popover_delay=200
+popover_activate=false
+workspace_count=4
+workspace_names=Work;Web;Media;System
+margin_top=0
+margin_bottom=0
+margin_left=0
+margin_right=0
+fullscreen_margin_top=0
+fullscreen_margin_bottom=0
+fullscreen_margin_left=0
+fullscreen_margin_right=0
+placement_mode=mouse
+placement_monitor=mouse
+center_new=true
+hide_titlebar_when_maximized=false
+maximize_new=false
+double_click_action=maximize
+middle_click_action=lower
+right_click_action=menu
+mousewheel_rollup=false
+invert_mousewheel=false
+scroll_workspaces=true
+show_dock_shadow=true
+dock_shadow_delta_x=0
+dock_shadow_delta_y=4
+dock_shadow_opacity=60
+dock_shadow_color=#000000
+EOF
+
+  # XFCE Settings
+  install -dm755 "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xsettings" version="1.0">
+  <property name="Net" type="empty">
+    <property name="ThemeName" type="string" value="Aerofruitos"/>
+    <property name="IconThemeName" type="string" value="Aerofruitos"/>
+    <property name="CursorThemeName" type="string" value="Aerofruitos"/>
+    <property name="CursorThemeSize" type="int" value="24"/>
+    <property name="DoubleClickTime" type="int" value="250"/>
+    <property name="DoubleClickDistance" type="int" value="5"/>
+    <property name="DndDragThreshold" type="int" value="8"/>
+    <property name="SoundThemeName" type="string" value="freedesktop"/>
+    <property name="EnableEventSounds" type="bool" value="true"/>
+    <property name="EnableInputFeedbackSounds" type="bool" value="true"/>
+  </property>
+  <property name="Xft" type="empty">
+    <property name="Antialias" type="int" value="1"/>
+    <property name="Hinting" type="int" value="1"/>
+    <property name="HintStyle" type="string" value="hintslight"/>
+    <property name="RGBA" type="string" value="rgb"/>
+    <property name="DPI" type="int" value="96"/>
+  </property>
+  <property name="Gtk" type="empty">
+    <property name="FontName" type="string" value="Segoe UI 10"/>
+    <property name="MonospaceFontName" type="string" value="JetBrains Mono 10"/>
+    <property name="ToolbarStyle" type="string" value="icons"/>
+    <property name="ToolbarIconSize" type="int" value="3"/>
+    <property name="ButtonImages" type="int" value="1"/>
+    <property name="MenuImages" type="int" value="1"/>
+    <property name="CursorThemeName" type="string" value="Aerofruitos"/>
+    <property name="CursorThemeSize" type="int" value="24"/>
+    <property name="DecorationLayout" type="string" value="menu:minimize,maximize,close"/>
+    <property name="ApplicationPreferDarkTheme" type="bool" value="false"/>
+    <property name="EnableAnimations" type="bool" value="true"/>
+  </property>
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitor0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/aerofruitos/default.jpg"/>
+          <property name="last-single-image" type="string" value="/usr/share/backgrounds/aerofruitos/default.jpg"/>
+        </property>
+        <property name="workspace1" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/aerofruitos/default.jpg"/>
+        </property>
+        <property name="workspace2" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/aerofruitos/default.jpg"/>
+        </property>
+        <property name="workspace3" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/aerofruitos/default.jpg"/>
+        </property>
+      </property>
+    </property>
+  </property>
+  <property name="desktop-icons" type="empty">
+    <property name="style" type="int" value="2"/>
+    <property name="icon-size" type="int" value="48"/>
+    <property name="tooltip-size" type="int" value="128"/>
+    <property name="label-width" type="int" value="120"/>
+    <property name="cell-width" type="int" value="80"/>
+    <property name="cell-height" type="int" value="80"/>
+    <property name="cell-padding" type="int" value="8"/>
+    <property name="cell-text-width-proportion" type="double" value="2.5"/>
+    <property name="text-color" type="string" value="#1A1A2E"/>
+    <property name="text-shadow" type="bool" value="true"/>
+    <property name="text-shadow-color" type="string" value="#FFFFFF80"/>
+    <property name="text-shadow-offset" type="int" value="1"/>
+    <property name="font" type="string" value="Segoe UI 10"/>
+  </property>
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-keyboard-shortcuts" version="1.0">
+  <property name="commands" type="empty">
+    <property name="custom" type="empty">
+      <property name="<Primary><Alt>Delete" type="string" value="xfce4-taskmanager"/>
+      <property name="<Primary><Alt>t" type="string" value="exo-open --launch TerminalEmulator"/>
+      <property name="<Primary><Alt>f" type="string" value="exo-open --launch FileManager"/>
+      <property name="<Primary><Alt>w" type="string" value="exo-open --launch WebBrowser"/>
+      <property name="<Super>space" type="string" value="xfce4-popup-whiskermenu"/>
+      <property name="<Super>l" type="string" value="xflock4"/>
+      <property name="Print" type="string" value="xfce4-screenshooter -f"/>
+      <property name="<Shift>Print" type="string" value="xfce4-screenshooter -w"/>
+      <property name="<Alt>Print" type="string" value="xfce4-screenshooter -r"/>
+    </property>
+  </property>
+  <property name="xfwm4" type="empty">
+    <property name="default" type="empty">
+      <property name="<Alt>Tab" type="string" value="cycle_windows_key"/>
+      <property name="<Shift><Alt>Tab" type="string" value="cycle_reverse_windows_key"/>
+      <property name="<Super>Tab" type="string" value="cycle_windows_key"/>
+      <property name="<Shift><Super>Tab" type="string" value="cycle_reverse_windows_key"/>
+      <property name="Escape" type="string" value="cancel"/>
+      <property name="Left" type="string" value="left_key"/>
+      <property name="Right" type="string" value="right_key"/>
+      <property name="Up" type="string" value="up_key"/>
+      <property name="Down" type="string" value="down_key"/>
+      <property name="<Super>Left" type="string" value="tile_left_key"/>
+      <property name="<Super>Right" type="string" value="tile_right_key"/>
+      <property name="<Super>Up" type="string" value="tile_up_key"/>
+      <property name="<Super>Down" type="string" value="tile_down_key"/>
+      <property name="<Super>Return" type="string" value="maximize_key"/>
+      <property name="<Super>space" type="string" value="fullscreen_key"/>
+      <property name="<Alt>F4" type="string" value="close_key"/>
+      <property name="<Alt>F7" type="string" value="move_key"/>
+      <property name="<Alt>F8" type="string" value="resize_key"/>
+      <property name="<Alt>F9" type="string" value="hide_key"/>
+      <property name="<Alt>F10" type="string" value="maximize_key"/>
+      <property name="<Alt>F11" type="string" value="fullscreen_key"/>
+      <property name="<Alt>F12" type="string" value="above_key"/>
+      <property name="<Control><Shift><Alt>Left" type="string" value="move_window_left_key"/>
+      <property name="<Control><Shift><Alt>Right" type="string" value="move_window_right_key"/>
+      <property name="<Control><Shift><Alt>Up" type="string" value="move_window_up_key"/>
+      <property name="<Control><Shift><Alt>Down" type="string" value="move_window_down_key"/>
+      <property name="<Control><Alt>Left" type="string" value="resize_left_key"/>
+      <property name="<Control><Alt>Right" type="string" value="resize_right_key"/>
+      <property name="<Control><Alt>Up" type="string" value="resize_up_key"/>
+      <property name="<Control><Alt>Down" type="string" value="resize_down_key"/>
+      <property name="<Alt>Space" type="string" value="popup_menu_key"/>
+      <property name="<Super>1" type="string" value="workspace_1_key"/>
+      <property name="<Super>2" type="string" value="workspace_2_key"/>
+      <property name="<Super>3" type="string" value="workspace_3_key"/>
+      <property name="<Super>4" type="string" value="workspace_4_key"/>
+    </property>
+  </property>
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-power-manager" version="1.0">
+  <property name="xfce4-power-manager" type="empty">
+    <property name="power-button-action" type="uint" value="3"/>
+    <property name="sleep-button-action" type="uint" value="3"/>
+    <property name="hibernate-button-action" type="uint" value="3"/>
+    <property name="lid-action-on-battery" type="uint" value="1"/>
+    <property name="lid-action-on-ac" type="uint" value="1"/>
+    <property name="brightness-on-battery" type="uint" value="9"/>
+    <property name="brightness-on-ac" type="uint" value="10"/>
+    <property name="dpms-enabled" type="bool" value="true"/>
+    <property name="dpms-on-ac-sleep" type="uint" value="15"/>
+    <property name="dpms-on-ac-off" type="uint" value="30"/>
+    <property name="dpms-on-battery-sleep" type="uint" value="5"/>
+    <property name="dpms-on-battery-off" type="uint" value="10"/>
+    <property name="blank-on-ac" type="int" value="10"/>
+    <property name="blank-on-battery" type="int" value="5"/>
+    <property name="lock-screen-suspend-hibernate" type="bool" value="true"/>
+    <property name="logind-handle-lid-switch" type="bool" value="true"/>
+    <property name="show-tray-icon" type="bool" value="true"/>
+    <property name="critical-power-action" type="uint" value="1"/>
+    <property name="critical-power-level" type="uint" value="5"/>
+    <property name="inactivity-on-ac" type="uint" value="15"/>
+    <property name="inactivity-on-battery" type="uint" value="10"/>
+    <property name="inactivity-sleep-mode-on-ac" type="uint" value="1"/>
+    <property name="inactivity-sleep-mode-on-battery" type="uint" value="1"/>
+    <property name="brightness-switch" type="uint" value="0"/>
+    <property name="brightness-switch-restore" type="bool" value="true"/>
+    <property name="presentation-mode" type="bool" value="false"/>
+  </property>
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-notifyd.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-notifyd" version="1.0">
+  <property name="theme" type="string" value="Aerofruitos"/>
+  <property name="position" type="string" value="top-right"/>
+  <property name="opacity" type="double" value="0.95"/>
+  <property name="timeout" type="int" value="5"/>
+  <property name="screen-position-monitor" type="int" value="-1"/>
+  <property name="margin" type="int" value="16"/>
+  <property name="gap" type="int" value="8"/>
+  <property name="max-width" type="int" value="400"/>
+  <property name="hide-on-click" type="bool" value="true"/>
+  <property name="show-urgent" type="bool" value="true"/>
+  <property name="show-on-monitor" type="int" value="-1"/>
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-terminal" version="1.0">
+  <property name="font-name" type="string" value="JetBrains Mono 10"/>
+  <property name="color-background" type="string" value="#1A1A2E"/>
+  <property name="color-foreground" type="string" value="#E0E0E0"/>
+  <property name="color-cursor" type="string" value="#00B4D8"/>
+  <property name="color-palette" type="string" value="#1A1A2E;#DC3545;#28A745;#FFC107;#00B4D8;#8A2BE2;#20C997;#E0E0E0;#4A4A6A;#E05252;#34D058;#FFCD38;#48CAE4;#A855F7;#4FD1C5;#FFFFFF"/>
+  <property name="tab-activity-color" type="string" value="#00B4D8"/>
+  <property name="scrollback-lines" type="int" value="10000"/>
+  <property name="scroll-on-output" type="bool" value="true"/>
+  <property name="scroll-on-keystroke" type="bool" value="true"/>
+  <property name="cursor-shape" type="string" value="block"/>
+  <property name="cursor-blink-mode" type="string" value="system"/>
+  <property name="audible-bell" type="bool" value="false"/>
+  <property name="visual-bell" type="bool" value="true"/>
+  <property name="bold-is-bright" type="bool" value="true"/>
+  <property name="word-chars" type="string" value="-A-Za-z0-9,./?%&#:_=+@~"/>
+  <property name="tab-position" type="string" value="top"/>
+  <property name="hide-menubar" type="bool" value="true"/>
+  <property name="hide-toolbar" type="bool" value="true"/>
+  <property name="hide-scrollbar" type="bool" value="false"/>
+  <property name="hide-borders" type="bool" value="true"/>
+  <property name="shortcuts" type="string" value="default"/>
+  <property name="encoding" type="string" value="UTF-8"/>
+  <property name="background-mode" type="string" value="transparent"/>
+  <property name="background-darkness" type="double" value="0.85"/>
+  <property name="background-image" type="string" value=""/>
+  <property name="cell-height-scale" type="double" value="1.2"/>
+  <property name="cell-width-scale" type="double" value="1.0"/>
+  <property name="color-use-theme" type="bool" value="false"/>
+  <property name="tab-activity-color" type="string" value="#00B4D8"/>
+  <property name="tab-activity-bold" type="bool" value="true"/>
+</channel>
+EOF
+
+  # Thunar configuration
+  install -dm755 "$pkgdir"/etc/xdg/Thunar
+  cat > "$pkgdir"/etc/xdg/Thunar/uca.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+  <action>
+    <icon>terminal</icon>
+    <name>Open Terminal Here</name>
+    <command>exo-open --launch TerminalEmulator --working-directory %f</command>
+    <description>Open terminal in this folder</description>
+    <patterns>*</patterns>
+    <directories/>
+    <audio-files/>
+    <image-files/>
+    <other-files/>
+    <text-files/>
+    <video-files/>
+  </action>
+  <action>
+    <icon>text-editor</icon>
+    <name>Edit as Root</name>
+    <command>pkexec mousepad %f</command>
+    <description>Edit file as root</description>
+    <patterns>*</patterns>
+    <text-files/>
+  </action>
+  <action>
+    <icon>application-x-executable</icon>
+    <name>Run as Root</name>
+    <command>pkexec %f</command>
+    <description>Run file as root</description>
+    <patterns>*</patterns>
+    <other-files/>
+  </action>
+</actions>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/Thunar/thunarrc << 'EOF'
+[Configuration]
+DefaultView=ThunarDetailsView
+ShowHidden=false
+ShowStatusbar=true
+ShowToolbar=true
+ShowLocationSelector=ThunarLocationEntry
+LastLocationBar=ThunarLocationEntry
+LastDetailsViewColumnOrder=THUNAR_COLUMN_NAME,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_TYPE,THUNAR_COLUMN_DATE_MODIFIED
+LastDetailsViewColumnWidths=50,20,20,20
+LastDetailsViewZoomLevel=2
+LastIconViewZoomLevel=3
+LastCompactViewZoomLevel=2
+DateStyle=THUNAR_DATE_STYLE_SIMPLE
+TimeStyle=THUNAR_TIME_STYLE_SIMPLE
+SortOrder=GTK_SORT_ASCENDING
+SortColumn=THUNAR_COLUMN_NAME
+FoldersFirst=true
+CaseSensitive=false
+SingleClick=false
+DoubleClickTime=250
+DoubleClickDistance=5
+MiscShowThumbnails=always
+MiscThumbnailSize=128
+MiscFullPathInTitle=false
+MiscShowFolderSize=false
+MiscConfirmDelete=true
+MiscConfirmEmptyTrash=true
+MiscUseDefaultGestures=true
+MiscMiddleClickOpensTerminal=false
+MiscWheelZoom=false
+ShortcutsViewShowHidden=false
+ShortcutsIconSize=THUNAR_ICON_SIZE_SMALLER
+SidePaneView=ThunarShortcutsPane
+LastWindowWidth=800
+LastWindowHeight=600
+LastWindowMaximized=false
+LastSeparatorPosition=180
+DiskViewShowOnStartup=false
+DiskViewShowSize=true
+DiskViewShowType=true
+DiskViewShowFreeSpace=true
+DiskViewShowTotalSpace=true
+TrashPanelShowSize=true
+TrashPanelShowDate=true
+RenameDialogShowPreview=true
+BulkRenameDialogShowPreview=true
+FileSizeFormat=THUNAR_FILE_SIZE_FORMAT_SI
+DateStyle=THUNAR_DATE_STYLE_SIMPLE
+TimeStyle=THUNAR_TIME_STYLE_SIMPLE
+LastCompactViewZoomLevel=2
+LastDetailsViewFixedColumns=false
+LastDetailsViewColumnOrder=THUNAR_COLUMN_NAME,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_TYPE,THUNAR_COLUMN_DATE_MODIFIED
+LastDetailsViewColumnWidths=50,20,20,20
+LastDetailsViewZoomLevel=2
+LastIconViewZoomLevel=3
+LastLocationBar=ThunarLocationEntry
+LastWindowWidth=800
+LastWindowHeight=600
+LastWindowMaximized=false
+LastSeparatorPosition=180
+SidePaneView=ThunarShortcutsPane
+ShortcutsIconSize=THUNAR_ICON_SIZE_SMALLER
+ShortcutsViewShowHidden=false
+ShowHidden=false
+ShowStatusbar=true
+ShowToolbar=true
+ShowLocationSelector=ThunarLocationEntry
+SingleClick=false
+SortColumn=THUNAR_COLUMN_NAME
+SortOrder=GTK_SORT_ASCENDING
+TimeStyle=THUNAR_TIME_STYLE_SIMPLE
+DateStyle=THUNAR_DATE_STYLE_SIMPLE
+MiscShowThumbnails=always
+MiscThumbnailSize=128
+MiscFullPathInTitle=false
+MiscShowFolderSize=false
+MiscConfirmDelete=true
+MiscConfirmEmptyTrash=true
+MiscUseDefaultGestures=true
+MiscMiddleClickOpensTerminal=false
+MiscWheelZoom=false
+</channel>
+EOF
+
+  # Whiskermenu configuration
+  install -dm755 "$pkgdir"/etc/xdg/xfce4/panel/whiskermenu-1.rc
+  cat > "$pkgdir"/etc/xdg/xfce4/panel/whiskermenu-1.rc << 'EOF'
+[WhiskerMenu]
+button-title=
+button-icon=aerofruitos-logo
+menu-width=550
+menu-height=500
+menu-opacity=95
+categories-icon-size=24
+recent-items=5
+favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,org.gnome.Nautilus.desktop,code.desktop,libreoffice-writer.desktop,gimp.desktop
+command=exo-open --launch TerminalEmulator
+search-actions=true
+show-recent=true
+show-favorites=true
+show-commands=true
+show-session=true
+show-settings=true
+hover-switch-category=true
+item-icon-size=24
+category-icon-size=24
+profile-icon-size=48
+command-text=Commands
+favorites-text=Favorites
+recent-text=Recent
+all-text=All Applications
+settings-text=Settings
+session-text=Session
+search-placeholder=Search...
+category-background=#C0FFFFFF
+category-border=#80D8EF
+category-text=#1A1A2E
+item-background=#C0FFFFFF
+item-border=#80D8EF
+item-text=#1A1A2E
+item-selected-background=#00B4D8
+item-selected-text=#FFFFFF
+button-background=#C0FFFFFF
+button-border=#80D8EF
+button-text=#1A1A2E
+button-hover-background=#00B4D8
+button-hover-text=#FFFFFF
+search-background=#FFFFFF
+search-border=#80D8EF
+search-text=#1A1A2E
+</channel>
+EOF
+
+  # Session configuration
+  install -dm755 "$pkgdir"/etc/xdg/xfce4/session
+  cat > "$pkgdir"/etc/xdg/xfce4/session/xfce4-session.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-session" version="1.0">
+  <property name="general" type="empty">
+    <property name="SessionName" type="string" value="Aerofruitos"/>
+    <property name="SaveOnExit" type="bool" value="true"/>
+    <property name="AutoSave" type="bool" value="true"/>
+    <property name="PromptOnLogout" type="bool" value="true"/>
+    <property name="Compatibility" type="bool" value="true"/>
+    <property name="FailsafeSessionName" type="string" value="Aerofruitos"/>
+  </property>
+  <property name="sessions" type="empty">
+    <property name="Failsafe" type="empty">
+      <property name="IsFailsafe" type="bool" value="true"/>
+      <property name="Count" type="int" value="5"/>
+      <property name="Client0_Command" type="array">
+        <value type="string" value="xfwm4"/>
+        <value type="string" value="--replace"/>
+      </property>
+      <property name="Client0_PerScreen" type="bool" value="false"/>
+      <property name="Client1_Command" type="array">
+        <value type="string" value="xfce4-panel"/>
+      </property>
+      <property name="Client1_PerScreen" type="bool" value="false"/>
+      <property name="Client2_Command" type="array">
+        <value type="string" value="xfce4-settings-helper"/>
+      </property>
+      <property name="Client2_PerScreen" type="bool" value="false"/>
+      <property name="Client3_Command" type="array">
+        <value type="string" value="thunar"/>
+        <value type="string" value="--daemon"/>
+      </property>
+      <property name="Client3_PerScreen" type="bool" value="false"/>
+      <property name="Client4_Command" type="array">
+        <value type="string" value="xfdesktop"/>
+      </property>
+      <property name="Client4_PerScreen" type="bool" value="false"/>
+    </property>
+  </property>
+  <property name="splash" type="empty">
+    <property name="Engine" type="string" value="simple"/>
+    <property name="Theme" type="string" value="Aerofruitos"/>
+    <property name="ShowChooser" type="bool" value="false"/>
+  </property>
+  <property name="startup" type="empty">
+    <property name="screen0" type="empty">
+      <property name="program0" type="string" value="xfce4-panel"/>
+      <property name="program1" type="string" value="xfdesktop"/>
+      <property name="program2" type="string" value="nm-applet"/>
+      <property name="program3" type="string" value="blueman-applet"/>
+      <property name="program4" type="string" value="xfce4-power-manager"/>
+      <property name="program5" type="string" value="xfce4-volumed-pulse"/>
+      <property name="program6" type="string" value="polkit-gnome-authentication-agent-1"/>
+      <property name="program7" type="string" value="picom"/>
+      <property name="program8" type="string" value="nitrogen --restore"/>
+    </property>
+  </property>
+</channel>
+EOF
+
+  # Picom configuration for XFCE
+  install -dm755 "$pkgdir"/etc/xdg
+  cat > "$pkgdir"/etc/xdg/picom.conf << 'EOF'
+# Aerofruitos Picom Configuration for XFCE
+# Glass/blur effects for Frutiger Aero
+
+backend = "glx";
+vsync = true;
+
+# Shadows
+shadow = true;
+no-dnd-shadow = true;
+no-dock-shadow = true;
+clear-shadow = true;
+shadow-radius = 12;
+shadow-offset-x = 0;
+shadow-offset-y = 4;
+shadow-opacity = 0.3;
+shadow-exclude = [
+  "!name~=''",
+  "class_g = 'Conky'",
+  "class_g = 'Notify-osd'",
+  "class_g = 'Xfce4-notifyd'",
+  "_GTK_FRAME_EXTENTS@:c"
+];
+
+# Fading
+fading = true;
+fade-in-step = 0.05;
+fade-out-step = 0.05;
+fade-exclude = [];
+
+# Transparency
+inactive-opacity = 0.95;
+active-opacity = 1.0;
+frame-opacity = 0.9;
+inactive-opacity-override = false;
+alpha-step = 0.06;
+
+# Blur (requires compositor support)
+blur-background = true;
+blur-background-frame = true;
+blur-background-fixed = false;
+blur-kern = "3x3box";
+blur-method = "dual_kawase";
+blur-strength = 8;
+
+# Window type settings
+wintypes:
+{
+  tooltip = { fade = true; shadow = true; opacity = 0.95; focus = true; full-shadow = false; };
+  menu = { fade = true; shadow = true; opacity = 0.95; focus = true; };
+  dropdown_menu = { fade = true; shadow = true; opacity = 0.95; focus = true; };
+  popup_menu = { fade = true; shadow = true; opacity = 0.95; focus = true; };
+  dialog = { fade = true; shadow = true; opacity = 1.0; focus = true; };
+  modal_dialog = { fade = true; shadow = true; opacity = 1.0; focus = true; };
+  notification = { fade = true; shadow = true; opacity = 0.95; focus = false; };
+  dock = { fade = true; shadow = false; opacity = 0.9; focus = false; };
+  desktop = { fade = false; shadow = false; opacity = 1.0; focus = false; };
+};
+
+# Corner radius
+corner-radius = 8;
+rounded-corners-exclude = [
+  "window_type = 'dock'",
+  "window_type = 'desktop'"
+];
+
+# Performance
+detect-rounded-corners = true;
+detect-client-opacity = true;
+refresh-rate = 0;
+use-ewmh-active-win = true;
+unredir-if-possible = true;
+unredir-if-possible-delay = 5000;
+paint-on-overlay = true;
+sw-opti = true;
+
+# Experimental
+experimental-backends = [];
+</channel>
+EOF
+
+  # Nitrogen configuration for wallpaper
+  install -dm755 "$pkgdir"/etc/xdg/nitrogen
+  cat > "$pkgdir"/etc/xdg/nitrogen/bg-saved.cfg << 'EOF'
+[xin_-1]
+file=/usr/share/backgrounds/aerofruitos/default.jpg
+mode=5
+bgcolor=#000000
+</channel>
+EOF
+
+  cat > "$pkgdir"/etc/xdg/nitrogen/nitrogen.cfg << 'EOF'
+[geometry]
+posx=0
+posy=0
+sizex=800
+sizey=600
+
+[nitrogen]
+view=icon
+recents=/usr/share/backgrounds/aerofruitos/
+icon_caps=true
+dirs=/usr/share/backgrounds/aerofruitos/;/usr/share/backgrounds/
+mode=5
+bgcolor=#000000
+</channel>
+EOF
+}

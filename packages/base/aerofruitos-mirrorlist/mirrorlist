@@ -1,0 +1,14 @@
+## Aerofruitos Repository Mirrorlist
+## Generated on 2026-11-15
+
+## Worldwide mirrors
+Server = https://mirrors.aerofruitos.org/$repo/os/$arch
+Server = https://mirror.aerofruitos.org/$repo/os/$arch
+
+## Fallback to Arch Linux mirrors
+## Uncomment if Aerofruitos mirrors are unavailable
+#Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch
+#Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
+#Server = https://mirror.bytemark.co.uk/archlinux/$repo/os/$arch
+#Server = https://mirrors.mit.edu/archlinux/$repo/os/$arch
+#Server = https://mirror.cs.pitt.edu/archlinux/$repo/os/$arch

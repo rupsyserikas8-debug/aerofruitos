@@ -1,0 +1,15 @@
+# Maintainer: Aerofruitos Team
+pkgname=aerofruitos-mirrorlist
+pkgver=20261115
+pkgrel=1
+pkgdesc='Aerofruitos mirror list for pacman'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos'
+license=(GPL)
+backup=(etc/pacman.d/mirrorlist)
+source=(mirrorlist)
+sha256sums=('SKIP')
+
+package() {
+  install -Dm644 mirrorlist "$pkgdir"/etc/pacman.d/mirrorlist
+}

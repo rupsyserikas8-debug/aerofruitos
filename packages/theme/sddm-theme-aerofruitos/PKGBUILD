@@ -1,0 +1,610 @@
+# Maintainer: Aerofruitos Team
+pkgname=sddm-theme-aerofruitos
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Frutiger Aero SDDM theme for Aerofruitos'
+arch=(any)
+url='https://github.com/aerofruitos/sddm-theme-aerofruitos'
+license=(GPL3)
+depends=('sddm' 'qt5-declarative' 'qt5-quickcontrols2' 'qt5-graphicaleffects')
+source=()
+sha256sums=()
+
+package() {
+  install -dm755 "$pkgdir"/usr/share/sddm/themes/aerofruitos/
+  
+  # Theme metadata
+  cat > "$pkgdir"/usr/share/sddm/themes/aerofruitos/metadata.desktop << 'EOF'
+[Desktop Entry]
+Type=Service
+ServiceTypes=X-SDDM-Theme
+Name=Aerofruitos
+Comment=Frutiger Aero login theme for Aerofruitos OS
+Author=Aerofruitos Team
+Version=1.0.0
+License=GPLv3
+EOF
+
+  # Main QML theme
+  cat > "$pkgdir"/usr/share/sddm/themes/aerofruitos/Main.qml << 'EOF'
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
+import QtGraphicalEffects 1.12
+
+Rectangle {
+    id: root
+    width: Screen.width
+    height: Screen.height
+    color: "#0A1620"
+    
+    // Background - Aero gradient
+    Rectangle {
+        anchors.fill: parent
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#0A1620" }
+            GradientStop { position: 0.5; color: "#1A1A2E" }
+            GradientStop { position: 1.0; color: "#0A1620" }
+        }
+    }
+    
+    // Subtle animated background pattern
+    Image {
+        id: bgPattern
+        anchors.fill: parent
+        source: "bg_pattern.png"
+        fillMode: Image.Tile
+        opacity: 0.03
+        NumberAnimation on rotation {
+            from: 0; to: 360; duration: 60000; loops: Animation.Infinite
+        }
+    }
+    
+    // Centered login card - Aero glass
+    Rectangle {
+        id: loginCard
+        width: Math.min(480, root.width * 0.9)
+        height: 520
+        anchors.centerIn: parent
+        radius: 16
+        color: "#C0FFFFFF"  // Glass white
+        border.color: "#80D8EF"
+        border.width: 2
+        
+        // Glass effect with blur
+        layer.enabled: true
+        layer.effect: ShaderEffect {
+            fragmentShader: "
+                uniform lowp sampler2D source;
+                uniform lowp float qt_Opacity;
+                varying highp vec2 qt_TexCoord0;
+                void main() {
+                    lowp vec4 color = texture2D(source, qt_TexCoord0);
+                    // Subtle frosted glass effect
+                    gl_FragColor = vec4(color.rgb * 1.05, color.a * 0.92) * qt_Opacity;
+                }
+            "
+        }
+        
+        // Inner glow
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: 2
+            radius: 14
+            color: "transparent"
+            border.color: "#FFFFFF30"
+            border.width: 1
+        }
+        
+        // Logo
+        Image {
+            id: logo
+            width: 120
+            height: 120
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "logo.png"
+            fillMode: Image.PreserveAspectFit
+            
+            // Subtle pulse animation
+            SequentialAnimation on opacity {
+                loops: Animation.Infinite
+                NumberAnimation { from: 0.9; to: 1.0; duration: 2000; easing.type: Easing.InOutQuad }
+                NumberAnimation { from: 1.0; to: 0.9; duration: 2000; easing.type: Easing.InOutQuad }
+            }
+        }
+        
+        // Title
+        Text {
+            id: titleText
+            anchors.top: logo.bottom
+            anchors.topMargin: 16
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Aerofruitos"
+            font.family: "Segoe UI"
+            font.pixelSize: 28
+            font.weight: Font.Light
+            color: "#1A1A2E"
+            
+            Text {
+                text: " Frutiger Aero Edition"
+                font.pixelSize: 14
+                font.weight: Font.Normal
+                color: "#00B4D8"
+            }
+        }
+        
+        // Username field
+        Column {
+            id: inputColumn
+            anchors.top: titleText.bottom
+            anchors.topMargin: 30
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 40
+            anchors.rightMargin: 40
+            spacing: 20
+            
+            // User combo box
+            ComboBox {
+                id: userCombo
+                width: parent.width
+                height: 48
+                model: ListModel {
+                    // Populated by SDDM
+                }
+                delegate: ItemDelegate {
+                    width: parent.width
+                    height: 48
+                    text: model.display
+                    font.family: "Segoe UI"
+                    font.pixelSize: 14
+                    color: "#1A1A2E"
+                    highlighted: ListView.isCurrentItem
+                    contentItem: Text {
+                        text: model.display
+                        font.family: "Segoe UI"
+                        font.pixelSize: 14
+                        color: "#1A1A2E"
+                        elide: Text.ElideRight
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        color: "#FFFFFF"
+                        border.color: "#80D8EF"
+                        border.width: 1
+                        radius: 8
+                    }
+                }
+                indicator: Image {
+                    source: "dropdown_arrow.png"
+                    width: 20
+                    height: 20
+                    color: "#00B4D8"
+                }
+                background: Rectangle {
+                    color: "#FFFFFF"
+                    border.color: "#80D8EF"
+                    border.width: 1
+                    radius: 8
+                }
+                contentItem: Text {
+                    leftPadding: 16
+                    rightPadding: 40
+                    font.family: "Segoe UI"
+                    font.pixelSize: 14
+                    color: "#1A1A2E"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+                popup: Popup {
+                    y: userCombo.height - 1
+                    width: userCombo.width
+                    implicitHeight: contentItem.implicitHeight
+                    contentItem: ListView {
+                        model: userCombo.popup.visible ? userCombo.delegateModel : null
+                        currentIndex: userCombo.highlightedIndex
+                        delegate: userCombo.delegate
+                    }
+                    background: Rectangle {
+                        color: "#C0FFFFFF"
+                        border.color: "#80D8EF"
+                        border.width: 2
+                        radius: 8
+                    }
+                }
+            }
+            
+            // Password field
+            TextField {
+                id: passwordField
+                width: parent.width
+                height: 48
+                placeholderText: "Password"
+                font.family: "Segoe UI"
+                font.pixelSize: 14
+                color: "#1A1A2E"
+                echoMode: TextField.Password
+                background: Rectangle {
+                    color: "#FFFFFF"
+                    border.color: passwordField.focus ? "#00B4D8" : "#80D8EF"
+                    border.width: passwordField.focus ? 2 : 1
+                    radius: 8
+                    // Focus glow
+                    SequentialAnimation on border.color {
+                        running: passwordField.focus
+                        loops: Animation.Infinite
+                        ColorAnimation { from: "#00B4D8"; to: "#48CAE4"; duration: 1500 }
+                        ColorAnimation { from: "#48CAE4"; to: "#00B4D8"; duration: 1500 }
+                    }
+                }
+                contentItem: TextInput {
+                    leftPadding: 16
+                    rightPadding: 16
+                    font.family: "Segoe UI"
+                    font.pixelSize: 14
+                    color: "#1A1A2E"
+                    selectionColor: "#00B4D880"
+                    selectedTextColor: "#FFFFFF"
+                }
+                Keys.onReturnPressed: loginButton.clicked()
+            }
+        }
+        
+        // Login button
+        Button {
+            id: loginButton
+            anchors.top: inputColumn.bottom
+            anchors.topMargin: 24
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width * 0.6
+            height: 48
+            text: "Sign In"
+            font.family: "Segoe UI"
+            font.pixelSize: 15
+            font.weight: Font.DemiBold
+            enabled: passwordField.length > 0
+            background: Rectangle {
+                color: loginButton.enabled ? "#00B4D8" : "#80D8EF80"
+                radius: 24
+                border.color: "#0096C7"
+                border.width: 1
+                // Pressed effect
+                PropertyAnimation on scale {
+                    duration: 100
+                }
+            }
+            contentItem: Text {
+                text: loginButton.text
+                font.family: "Segoe UI"
+                font.pixelSize: 15
+                font.weight: Font.DemiBold
+                color: "#FFFFFF"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+            onClicked: {
+                login(userCombo.currentText, passwordField.text)
+            }
+        }
+        
+        // Session selector
+        Row {
+            id: sessionRow
+            anchors.top: loginButton.bottom
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 12
+            
+            Text {
+                text: "Session:"
+                font.family: "Segoe UI"
+                font.pixelSize: 12
+                color: "#4A4A6A"
+            }
+            
+            ComboBox {
+                id: sessionCombo
+                width: 180
+                height: 36
+                model: ListModel {
+                    // Populated by SDDM with available sessions
+                }
+                delegate: ItemDelegate {
+                    width: parent.width
+                    height: 36
+                    text: model.name
+                    font.family: "Segoe UI"
+                    font.pixelSize: 12
+                    color: "#1A1A2E"
+                    contentItem: Text {
+                        text: model.name
+                        font.family: "Segoe UI"
+                        font.pixelSize: 12
+                        color: "#1A1A2E"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        color: "#FFFFFF"
+                        border.color: "#80D8EF"
+                        border.width: 1
+                        radius: 6
+                    }
+                }
+                background: Rectangle {
+                    color: "#FFFFFF"
+                    border.color: "#80D8EF"
+                    border.width: 1
+                    radius: 6
+                }
+                contentItem: Text {
+                    leftPadding: 12
+                    rightPadding: 32
+                    font.family: "Segoe UI"
+                    font.pixelSize: 12
+                    color: "#1A1A2E"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+            }
+        }
+        
+        // Bottom buttons (shutdown, reboot, etc.)
+        Row {
+            id: actionRow
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 24
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 16
+            
+            // Shutdown button
+            Button {
+                id: shutdownBtn
+                width: 44
+                height: 44
+                background: Rectangle {
+                    color: "#DC3545"
+                    radius: 22
+                    border.color: "#A71E2A"
+                    border.width: 1
+                }
+                contentItem: Image {
+                    source: "power.png"
+                    width: 20
+                    height: 20
+                    color: "#FFFFFF"
+                }
+                onClicked: shutdown()
+                ToolTip.text: "Shutdown"
+            }
+            
+            // Reboot button
+            Button {
+                id: rebootBtn
+                width: 44
+                height: 44
+                background: Rectangle {
+                    color: "#FFB700"
+                    radius: 22
+                    border.color: "#E6A000"
+                    border.width: 1
+                }
+                contentItem: Image {
+                    source: "reboot.png"
+                    width: 20
+                    height: 20
+                    color: "#1A1A2E"
+                }
+                onClicked: reboot()
+                ToolTip.text: "Reboot"
+            }
+            
+            // Suspend button
+            Button {
+                id: suspendBtn
+                width: 44
+                height: 44
+                background: Rectangle {
+                    color: "#00B4D8"
+                    radius: 22
+                    border.color: "#0096C7"
+                    border.width: 1
+                }
+                contentItem: Image {
+                    source: "suspend.png"
+                    width: 20
+                    height: 20
+                    color: "#FFFFFF"
+                }
+                onClicked: suspend()
+                ToolTip.text: "Suspend"
+            }
+        }
+    }
+    
+    // Virtual keyboard hint
+    Rectangle {
+        id: keyboardHint
+        visible: Qt.inputMethod.visible
+        anchors.bottom: root.bottom
+        anchors.bottomMargin: 20
+        anchors.horizontalCenter: root.horizontalCenter
+        height: 30
+        width: 200
+        radius: 15
+        color: "#C0FFFFFF"
+        border.color: "#80D8EF"
+        border.width: 1
+        Text {
+            anchors.centerIn: parent
+            text: "Virtual keyboard active"
+            font.family: "Segoe UI"
+            font.pixelSize: 11
+            color: "#4A4A6A"
+        }
+    }
+    
+    // CapsLock warning
+    Rectangle {
+        id: capsLockWarning
+        visible: Qt.inputMethod.capsLock
+        anchors.bottom: loginCard.top
+        anchors.bottomMargin: 16
+        anchors.horizontalCenter: root.horizontalCenter
+        height: 28
+        width: 220
+        radius: 14
+        color: "#FFF3CD"
+        border.color: "#FFC107"
+        border.width: 1
+        Row {
+            anchors.centerIn: parent
+            spacing: 6
+            Image {
+                source: "warning.png"
+                width: 16
+                height: 16
+                color: "#856404"
+            }
+            Text {
+                text: "Caps Lock is on"
+                font.family: "Segoe UI"
+                font.pixelSize: 12
+                color: "#856404"
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+    }
+}
+EOF
+
+  # Theme configuration
+  cat > "$pkgdir"/usr/share/sddm/themes/aerofruitos/theme.conf << 'EOF'
+[Theme]
+Name=Aerofruitos
+Author=Aerofruitos Team
+Description=Frutiger Aero login theme for Aerofruitos OS
+Version=1.0.0
+License=GPLv3
+MainQml=Main.qml
+PreviewImage=preview.png
+
+# Font configuration
+Font=Segoe UI
+FontSize=14
+
+# Colors
+BackgroundColor=#0A1620
+CardBackgroundColor=#C0FFFFFF
+CardBorderColor=#80D8EF
+PrimaryColor=#00B4D8
+PrimaryHoverColor=#48CAE4
+PrimaryPressedColor=#0096C7
+TextColor=#1A1A2E
+TextMutedColor=#4A4A6A
+ErrorColor=#DC3545
+WarningColor=#FFB700
+SuccessColor=#28A745
+
+# Animation
+EnableAnimations=true
+AnimationDuration=200
+
+# Layout
+CardWidth=480
+CardHeight=520
+CardRadius=16
+FieldHeight=48
+FieldRadius=8
+ButtonHeight=48
+ButtonRadius=24
+
+# Features
+ShowSessionSelector=true
+ShowActionButtons=true
+ShowVirtualKeyboardHint=true
+ShowCapsLockWarning=true
+AutoLoginDelay=0
+EOF
+
+  # Placeholder asset descriptions
+  cat > "$pkgdir"/usr/share/sddm/themes/aerofruitos/README.txt << 'EOF'
+Aerofruitos SDDM Theme - Frutiger Aero Style
+
+Required Assets:
+- logo.png: Aerofruitos logo, 120x120px, Aero glass style with teal glow
+- bg_pattern.png: Subtle tileable pattern for background animation
+- dropdown_arrow.png: Dropdown arrow icon, 20x20px, teal color
+- power.png: Power icon, 20x20px
+- reboot.png: Reboot icon, 20x20px
+- suspend.png: Suspend/moon icon, 20x20px
+- warning.png: Warning triangle icon, 16x16px
+- preview.png: Theme preview screenshot, 1920x1080px
+
+Color Palette (Frutiger Aero):
+- Primary Teal: #00B4D8
+- Teal Light: #48CAE4
+- Teal Dark: #0096C7
+- Teal Hover: #00B4D8
+- Orange: #FFB700
+- White: #FFFFFF
+- Glass White: #C0FFFFFF (rgba 255,255,255,0.75)
+- Glass Border: #80D8EF
+- Dark BG: #0A1620
+- Card Dark: #1A1A2E
+- Text Primary: #1A1A2E
+- Text Muted: #4A4A6A
+- Error Red: #DC3545
+- Warning Yellow: #FFC107
+- Success Green: #28A745
+
+Fonts:
+- Primary: Segoe UI (12-28pt)
+- Weights: Light, Normal, DemiBold
+
+Effects:
+- Frosted glass login card with subtle inner glow
+- Animated background pattern (slow rotation)
+- Logo pulse animation
+- Focus glow on password field
+- Button press scale animation
+- Smooth transitions (200ms)
+
+Session Options (auto-populated by SDDM):
+- Aerofruitos XFCE (default)
+- Aerofruitos i3
+- Plasma (if installed)
+- GNOME (if installed)
+EOF
+
+  # SDDM config snippet
+  install -dm755 "$pkgdir"/etc/sddm.conf.d/
+  cat > "$pkgdir"/etc/sddm.conf.d/99-aerofruitos-theme.conf << 'EOF'
+[Theme]
+Current=aerofruitos
+CursorTheme=Aerofruitos
+CursorSize=24
+
+[Autologin]
+Relogin=false
+
+[General]
+InputMethod=qtvirtualkeyboard
+Numlock=on
+
+[Users]
+DefaultPath=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+HideUsers=root
+HideShells=/sbin/nologin,/bin/false
+MaximumUid=60000
+MinimumUid=1000
+RememberLastSession=true
+RememberLastUser=true
+
+[Wayland]
+EnableHiDPI=true

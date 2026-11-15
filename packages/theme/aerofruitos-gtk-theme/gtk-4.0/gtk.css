@@ -1,0 +1,1039 @@
+/* Aerofruitos GTK4 Theme - Frutiger Aero Style */
+/* Based on GTK3 theme with GTK4 adjustments */
+
+/* Color Palette - Frutiger Aero */
+@define-color aero_teal #00B4D8;
+@define-color aero_teal_dark #0096C7;
+@define-color aero_teal_light #48CAE4;
+@define-color aero_teal_hover #00B4D8;
+@define-color aero_orange #FFB700;
+@define-color aero_orange_dark #FFA500;
+@define-color aero_white #FFFFFF;
+@define-color aero_white_translucent rgba(255, 255, 255, 0.88);
+@define-color aero_glass rgba(255, 255, 255, 0.75);
+@define-color aero_glass_dark rgba(255, 255, 255, 0.65);
+@define-color aero_bg #F0F8FF;
+@define-color aero_bg_dark #E0F0F8;
+@define-color aero_text #1A1A2E;
+@define-color aero_text_light #4A4A6A;
+@define-color aero_border #80D8EF;
+@define-color aero_shadow rgba(0, 0, 0, 0.25);
+@define-color aero_highlight rgba(255, 255, 255, 0.5);
+@define-color aero_pressed rgba(255, 215, 0, 0.25);
+@define-color aero_focus #00B4D8;
+@define-color aero_success #28A745;
+@define-color aero_warning #FFC107;
+@define-color aero_error #DC3545;
+
+/* Base */
+* {
+  font-family: "Segoe UI", "Noto Sans", sans-serif;
+  font-size: 10pt;
+  color: @aero_text;
+  background-color: transparent;
+}
+
+/* Window */
+window {
+  background-color: @aero_bg;
+}
+
+window.csd {
+  background-color: transparent;
+}
+
+window.frame {
+  border-radius: 8px;
+  box-shadow: 0 4px 24px @aero_shadow;
+  border: 1px solid @aero_border;
+  background-color: @aero_white_translucent;
+}
+
+/* Header Bar - Aero glass titlebar */
+headerbar {
+  background: linear-gradient(to bottom, @aero_glass, @aero_glass_dark);
+  border: none;
+  border-bottom: 1px solid @aero_border;
+  border-radius: 8px 8px 0 0;
+  padding: 0 12px;
+  min-height: 36px;
+  transition: all 150ms ease;
+}
+
+headerbar:backdrop {
+  background: linear-gradient(to bottom, @aero_bg_dark, @aero_bg);
+  border-bottom: 1px solid @aero_border;
+}
+
+headerbar.titlebar {
+  border-radius: 8px 8px 0 0;
+}
+
+headerbar button {
+  border-radius: 16px;
+  min-width: 32px;
+  min-height: 32px;
+  margin: 2px;
+  padding: 4px;
+  background-color: transparent;
+  border: none;
+  color: @aero_text;
+  transition: all 100ms ease;
+}
+
+headerbar button:hover {
+  background-color: @aero_teal_hover;
+  color: @aero_white;
+  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.4);
+}
+
+headerbar button:active {
+  background-color: @aero_teal_dark;
+}
+
+headerbar button:disabled {
+  opacity: 0.4;
+  color: @aero_text_light;
+}
+
+headerbar button.titlebutton.close:hover {
+  background-color: @aero_error;
+  color: @aero_white;
+}
+
+headerbar button.titlebutton.maximize:hover,
+headerbar button.titlebutton.minimize:hover {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+headerbar entry {
+  border-radius: 18px;
+  padding: 4px 16px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  color: @aero_text;
+  min-width: 200px;
+}
+
+headerbar entry:focus {
+  border-color: @aero_teal;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+/* Buttons - Aero glass style */
+button {
+  border-radius: 6px;
+  min-height: 32px;
+  min-width: 80px;
+  padding: 6px 16px;
+  margin: 2px;
+  border: 1px solid @aero_border;
+  background: linear-gradient(to bottom, @aero_white_translucent, @aero_glass);
+  color: @aero_text;
+  text-shadow: 0 1px 0 @aero_highlight;
+  box-shadow: inset 0 1px 0 @aero_highlight,
+              0 1px 3px @aero_shadow;
+  transition: all 120ms ease;
+}
+
+button:hover {
+  background: linear-gradient(to bottom, @aero_teal_light, @aero_teal);
+  border-color: @aero_teal_dark;
+  color: @aero_white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              0 2px 8px rgba(0, 180, 216, 0.4);
+}
+
+button:active {
+  background: linear-gradient(to bottom, @aero_teal, @aero_teal_dark);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2),
+              0 1px 0 @aero_highlight;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: inset 0 1px 0 @aero_highlight,
+              0 1px 3px @aero_shadow,
+              0 0 0 2px @aero_teal,
+              0 0 0 4px rgba(0, 180, 216, 0.2);
+}
+
+button:disabled {
+  opacity: 0.5;
+  color: @aero_text_light;
+  background: linear-gradient(to bottom, @aero_bg_dark, @aero_bg);
+  border-color: @aero_border;
+}
+
+button.suggested-action {
+  background: linear-gradient(to bottom, @aero_teal_light, @aero_teal);
+  border-color: @aero_teal_dark;
+  color: @aero_white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+button.suggested-action:hover {
+  background: linear-gradient(to bottom, @aero_teal, @aero_teal_dark);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              0 2px 10px rgba(0, 180, 216, 0.5);
+}
+
+button.destructive-action {
+  background: linear-gradient(to bottom, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.1));
+  border-color: @aero_error;
+  color: @aero_error;
+}
+
+button.destructive-action:hover {
+  background: linear-gradient(to bottom, @aero_error, #c82333);
+  color: @aero_white;
+  border-color: #c82333;
+}
+
+button.flat {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 4px 12px;
+}
+
+button.flat:hover {
+  background-color: @aero_glass;
+  box-shadow: none;
+}
+
+button.flat:active {
+  background-color: @aero_glass_dark;
+}
+
+/* Linked buttons */
+button.linked {
+  border-radius: 0;
+  border-width: 1px 0 1px 1px;
+}
+
+button.linked:first-child {
+  border-radius: 6px 0 0 6px;
+  border-left-width: 1px;
+}
+
+button.linked:last-child {
+  border-radius: 0 6px 6px 0;
+  border-right-width: 1px;
+}
+
+button.linked:only-child {
+  border-radius: 6px;
+  border-width: 1px;
+}
+
+/* Entry */
+entry {
+  border-radius: 6px;
+  min-height: 32px;
+  padding: 6px 12px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+  color: @aero_text;
+  caret-color: @aero_teal;
+  transition: all 120ms ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+entry:hover {
+  border-color: @aero_teal_light;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1),
+              0 0 0 1px @aero_teal_light;
+}
+
+entry:focus {
+  border-color: @aero_teal;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1),
+              0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+entry:disabled {
+  background-color: @aero_bg_dark;
+  color: @aero_text_light;
+  border-color: @aero_border;
+}
+
+entry.error {
+  border-color: @aero_error;
+}
+
+entry.error:focus {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1),
+              0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+/* SpinButton */
+spinbutton {
+  border-radius: 6px;
+}
+
+spinbutton button {
+  border-radius: 0;
+  min-width: 28px;
+  min-height: 16px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+spinbutton button.up {
+  border-radius: 0 6px 0 0;
+  border-bottom: 1px solid @aero_border;
+}
+
+spinbutton button.down {
+  border-radius: 0 0 6px 0;
+}
+
+spinbutton button:hover {
+  background-color: @aero_glass;
+}
+
+spinbutton entry {
+  border-radius: 6px 0 0 6px;
+}
+
+/* ComboBox / DropDown */
+combobox,
+dropdown {
+  border-radius: 6px;
+  min-height: 32px;
+  padding: 6px 36px 6px 12px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+  color: @aero_text;
+  transition: all 120ms ease;
+}
+
+combobox:hover,
+dropdown:hover {
+  border-color: @aero_teal_light;
+}
+
+combobox:focus,
+dropdown:focus {
+  border-color: @aero_teal;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+combobox button,
+dropdown button {
+  border-radius: 0 6px 6px 0;
+  min-width: 32px;
+  border-left: 1px solid @aero_border;
+  background: linear-gradient(to bottom, @aero_glass, @aero_glass_dark);
+}
+
+combobox button:hover,
+dropdown button:hover {
+  background: linear-gradient(to bottom, @aero_teal_light, @aero_teal);
+  color: @aero_white;
+}
+
+/* CheckButton / RadioButton */
+checkbutton,
+radiobutton {
+  min-height: 20px;
+  min-width: 20px;
+  padding: 2px;
+}
+
+checkbutton check,
+radiobutton radio {
+  min-height: 18px;
+  min-width: 18px;
+  border-radius: 4px;
+  border: 2px solid @aero_border;
+  background-color: @aero_white;
+  transition: all 100ms ease;
+}
+
+checkbutton check:focus,
+radiobutton radio:focus {
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+checkbutton check:checked {
+  background-color: @aero_teal;
+  border-color: @aero_teal;
+  background-image: none;
+}
+
+checkbutton check:checked:hover,
+radiobutton radio:checked:hover {
+  background-color: @aero_teal_dark;
+  border-color: @aero_teal_dark;
+}
+
+radiobutton radio {
+  border-radius: 9px;
+}
+
+radiobutton radio:checked {
+  background-image: none;
+  background-color: @aero_white;
+  box-shadow: inset 0 0 0 4px @aero_teal;
+}
+
+/* Scale / Slider */
+scale {
+  min-height: 24px;
+  min-width: 100px;
+}
+
+scale trough {
+  min-height: 6px;
+  border-radius: 3px;
+  background-color: @aero_bg_dark;
+  border: 1px solid @aero_border;
+  margin: 9px 4px;
+}
+
+scale trough highlight {
+  background-color: @aero_teal;
+  border-radius: 3px;
+  border: 1px solid @aero_teal;
+}
+
+scale slider {
+  min-width: 20px;
+  min-height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, @aero_white, @aero_glass);
+  border: 2px solid @aero_teal;
+  box-shadow: 0 2px 6px @aero_shadow;
+  transition: all 100ms ease;
+}
+
+scale slider:hover {
+  background: linear-gradient(to bottom, @aero_teal_light, @aero_teal);
+  border-color: @aero_teal_dark;
+  box-shadow: 0 2px 10px rgba(0, 180, 216, 0.5);
+  transform: scale(1.15);
+}
+
+scale slider:active {
+  background: linear-gradient(to bottom, @aero_teal, @aero_teal_dark);
+  transform: scale(1.1);
+}
+
+scale marks top,
+scale marks bottom {
+  color: @aero_text_light;
+  font-size: 8pt;
+}
+
+/* ProgressBar */
+progressbar {
+  min-height: 12px;
+  border-radius: 6px;
+  background-color: @aero_bg_dark;
+  border: 1px solid @aero_border;
+  overflow: hidden;
+}
+
+progressbar trough {
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+progressbar progress {
+  border-radius: 6px;
+  background: linear-gradient(45deg, 
+    @aero_teal 25%, 
+    @aero_teal_light 25%, 
+    @aero_teal_light 50%, 
+    @aero_teal 50%, 
+    @aero_teal 75%, 
+    @aero_teal_light 75%, 
+    @aero_teal_light 100%);
+  background-size: 28px 28px;
+  animation: aero-progress 1s linear infinite;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes aero-progress {
+  0% { background-position: 0 0; }
+  100% { background-position: 28px 0; }
+}
+
+/* Scrollbar */
+scrollbar {
+  background-color: transparent;
+}
+
+scrollbar slider {
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 5px;
+  background-color: @aero_glass;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 100ms ease;
+}
+
+scrollbar slider:hover {
+  background-color: @aero_teal_light;
+  border-color: @aero_teal;
+  background-clip: padding-box;
+}
+
+scrollbar slider:active {
+  background-color: @aero_teal;
+  border-color: @aero_teal_dark;
+}
+
+scrollbar button {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* Menu / Popover */
+menu,
+popover {
+  border-radius: 8px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 8px 32px @aero_shadow;
+  padding: 6px 0;
+}
+
+menu separator,
+popover separator {
+  min-height: 1px;
+  margin: 6px 12px;
+  background-color: @aero_border;
+  border: none;
+}
+
+menuitem {
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin: 2px 8px;
+  color: @aero_text;
+  transition: all 80ms ease;
+}
+
+menuitem:hover {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+menuitem:disabled {
+  opacity: 0.5;
+}
+
+menuitem arrow {
+  min-width: 12px;
+  min-height: 12px;
+  color: @aero_text_light;
+}
+
+menuitem:hover arrow {
+  color: @aero_white;
+}
+
+/* Tooltip */
+tooltip {
+  border-radius: 6px;
+  background-color: @aero_glass_dark;
+  border: 1px solid @aero_border;
+  box-shadow: 0 4px 16px @aero_shadow;
+  padding: 8px 12px;
+  color: @aero_white;
+  font-size: 9pt;
+}
+
+/* Notebook / Tabs */
+notebook {
+  border: none;
+}
+
+notebook header {
+  background-color: transparent;
+  border-bottom: 1px solid @aero_border;
+  padding: 0 4px;
+}
+
+notebook tab {
+  border-radius: 6px 6px 0 0;
+  min-height: 32px;
+  min-width: 80px;
+  padding: 6px 16px;
+  margin: 0 2px;
+  background: linear-gradient(to bottom, @aero_glass, @aero_glass_dark);
+  border: 1px solid @aero_border;
+  border-bottom: none;
+  color: @aero_text;
+  transition: all 100ms ease;
+}
+
+notebook tab:hover {
+  background: linear-gradient(to bottom, @aero_teal_light, @aero_teal);
+  color: @aero_white;
+  border-color: @aero_teal;
+}
+
+notebook tab:checked {
+  background: linear-gradient(to bottom, @aero_white_translucent, @aero_glass);
+  border-color: @aero_teal;
+  border-bottom: 1px solid @aero_white_translucent;
+  color: @aero_teal_dark;
+  box-shadow: 0 -2px 8px rgba(0, 180, 216, 0.2);
+}
+
+/* TreeView / ListView */
+treeview {
+  border-radius: 6px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+}
+
+treeview:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+treeview:selected:focus {
+  background-color: @aero_teal_dark;
+}
+
+treeview header {
+  background: linear-gradient(to bottom, @aero_glass, @aero_glass_dark);
+  border: none;
+  border-bottom: 1px solid @aero_border;
+  padding: 8px 12px;
+  color: @aero_text;
+  font-weight: 600;
+}
+
+treeview column button {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+treeview column button:hover {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+}
+
+/* Statusbar */
+statusbar {
+  background-color: @aero_glass;
+  border-top: 1px solid @aero_border;
+  padding: 4px 12px;
+  color: @aero_text_light;
+  font-size: 9pt;
+}
+
+/* Frame */
+frame {
+  border-radius: 6px;
+  border: 1px solid @aero_border;
+  background-color: @aero_glass;
+  padding: 12px;
+  margin: 6px 0;
+}
+
+frame > label {
+  font-weight: 600;
+  color: @aero_teal_dark;
+  padding: 0 8px;
+  background-color: @aero_white_translucent;
+}
+
+/* Paned */
+paned {
+  background-color: transparent;
+}
+
+paned separator {
+  min-width: 6px;
+  min-height: 6px;
+  background-color: @aero_border;
+  border-radius: 3px;
+  transition: all 100ms ease;
+}
+
+paned separator:hover {
+  background-color: @aero_teal;
+}
+
+/* Expander */
+expander {
+  margin: 6px 0;
+}
+
+expander > label {
+  font-weight: 600;
+  color: @aero_text;
+}
+
+/* LevelBar */
+levelbar {
+  min-height: 12px;
+  border-radius: 6px;
+  background-color: @aero_bg_dark;
+  border: 1px solid @aero_border;
+}
+
+levelbar block.filled {
+  border-radius: 6px;
+  background: linear-gradient(to right, @aero_teal, @aero_teal_light);
+}
+
+levelbar block.filled.low {
+  background: linear-gradient(to right, @aero_success, #20c997);
+}
+
+levelbar block.filled.high {
+  background: linear-gradient(to right, @aero_warning, @aero_orange);
+}
+
+levelbar block.filled.critical {
+  background: linear-gradient(to right, @aero_error, #e05252);
+}
+
+/* Sidebar / Navigation */
+.sidebar {
+  background-color: @aero_glass;
+  border-right: 1px solid @aero_border;
+}
+
+.sidebar .view {
+  background-color: transparent;
+}
+
+.sidebar row {
+  border-radius: 6px;
+  margin: 2px 8px;
+  padding: 8px 12px;
+}
+
+.sidebar row:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+.sidebar row:hover:not(:selected) {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+}
+
+/* Switch */
+switch {
+  min-width: 52px;
+  min-height: 28px;
+  border-radius: 14px;
+  background-color: @aero_bg_dark;
+  border: 2px solid @aero_border;
+  transition: all 150ms ease;
+}
+
+switch:checked {
+  background-color: @aero_teal;
+  border-color: @aero_teal;
+}
+
+switch slider {
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 11px;
+  background-color: @aero_white;
+  box-shadow: 0 2px 6px @aero_shadow;
+  transition: transform 150ms ease;
+}
+
+switch:checked slider {
+  transform: translateX(24px);
+  background-color: @aero_white;
+}
+
+/* Search Entry */
+.search-entry {
+  border-radius: 20px;
+  padding: 6px 16px 6px 40px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+}
+
+.search-entry:focus {
+  border-color: @aero_teal;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+/* Message Dialog */
+.message-dialog {
+  border-radius: 12px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 16px 48px @aero_shadow;
+  padding: 24px;
+}
+
+.message-dialog .title {
+  font-size: 14pt;
+  font-weight: 600;
+  color: @aero_text;
+  margin-bottom: 8px;
+}
+
+.message-dialog .body {
+  color: @aero_text_light;
+  line-height: 1.5;
+}
+
+/* Calendar */
+calendar {
+  border-radius: 8px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 8px 32px @aero_shadow;
+  padding: 12px;
+}
+
+calendar:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+  border-radius: 50%;
+}
+
+calendar day:hover {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+  border-radius: 50%;
+}
+
+calendar header {
+  background-color: @aero_glass;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+/* InfoBar */
+infobar {
+  border-radius: 8px;
+  border: 1px solid @aero_border;
+  background-color: @aero_glass;
+  padding: 12px 16px;
+}
+
+infobar.info {
+  border-left: 4px solid @aero_teal;
+}
+
+infobar.warning {
+  border-left: 4px solid @aero_warning;
+}
+
+infobar.error {
+  border-left: 4px solid @aero_error;
+}
+
+infobar.question {
+  border-left: 4px solid @aero_orange;
+}
+
+/* Popover */
+popover.background {
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 8px 32px @aero_shadow;
+  border-radius: 8px;
+}
+
+/* Overview (Activities) */
+.overview {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Screen Shield (Lock Screen) */
+.screen-shield {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.screen-shield-clock {
+  font-size: 72pt;
+  font-weight: 200;
+  color: @aero_white;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.screen-shield-date {
+  font-size: 18pt;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Notification */
+notification {
+  border-radius: 10px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 8px 32px @aero_shadow;
+  padding: 16px;
+  margin: 8px;
+}
+
+notification.critical {
+  border-left: 4px solid @aero_error;
+}
+
+/* Lock Screen */
+.lock-dialog {
+  border-radius: 16px;
+  background-color: @aero_white_translucent;
+  border: 1px solid @aero_border;
+  box-shadow: 0 16px 64px @aero_shadow;
+  padding: 32px;
+}
+
+.lock-dialog .entry {
+  border-radius: 24px;
+  padding: 12px 20px;
+  font-size: 14pt;
+}
+
+/* Window Controls */
+.window-controls {
+  spacing: 4px;
+}
+
+.window-controls button {
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Resize grip */
+.resize-grip {
+  width: 16px;
+  height: 16px;
+  background-image: -gtk-gradient(radial, center center, 0, center center, 8,
+    from(@aero_teal), to(transparent));
+}
+
+/* Text View */
+textview {
+  border-radius: 6px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+  padding: 8px;
+}
+
+textview:focus {
+  border-color: @aero_teal;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.2);
+}
+
+/* Separator */
+separator {
+  min-width: 1px;
+  min-height: 1px;
+  background-color: @aero_border;
+  border: none;
+  margin: 6px 0;
+}
+
+/* Image */
+image {
+  color: @aero_text;
+}
+
+/* Label */
+label {
+  color: @aero_text;
+}
+
+label:disabled {
+  opacity: 0.5;
+}
+
+/* Link */
+link {
+  color: @aero_teal;
+  text-decoration: underline;
+}
+
+link:hover {
+  color: @aero_teal_dark;
+}
+
+link:visited {
+  color: #8A2BE2;
+}
+
+/* Spinner */
+spinner {
+  color: @aero_teal;
+}
+
+/* GTK4 specific - column view */
+columnview {
+  border-radius: 6px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+}
+
+columnview header {
+  background: linear-gradient(to bottom, @aero_glass, @aero_glass_dark);
+  border-bottom: 1px solid @aero_border;
+}
+
+columnview row:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+columnview row:hover:not(:selected) {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+}
+
+/* GridView */
+gridview {
+  border-radius: 6px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+}
+
+gridview row:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+gridview row:hover:not(:selected) {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+}
+
+/* ListView */
+listview {
+  border-radius: 6px;
+  background-color: @aero_white;
+  border: 1px solid @aero_border;
+}
+
+listview row:selected {
+  background-color: @aero_teal;
+  color: @aero_white;
+}
+
+listview row:hover:not(:selected) {
+  background-color: @aero_teal_light;
+  color: @aero_white;
+}

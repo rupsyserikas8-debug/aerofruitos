@@ -1,0 +1,64 @@
+name: Build Aerofruitos ISO (Simple)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ISO
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build with Arch Linux runner
+        uses: ArchLinux/archlinux-action@v1
+        with:
+          pacman-packages: |
+            archiso git python python-textual
+            xmlto kmod bc libelf cpio perl tar xz
+            gtk3 gtk4 gtk-engine-murrine sassc meson
+            imagemagick inkscape xcursorgen fontconfig unzip
+            qemu-system-x86 ovmf dosfstools gptfdisk parted
+            cryptsetup lvm2 btrfs-progs f2fs-tools reflector
+          run: |
+            set -euo pipefail
+            cd aerofruitos
+            chmod +x build.sh
+            ./build.sh
+      
+      - name: Find ISO
+        id: iso
+        run: |
+          ISO=$(find aerofruitos/build/iso_out -name "*.iso" | head -1)
+          echo "path=$ISO" >> $GITHUB_OUTPUT
+          echo "name=$(basename $ISO)" >> $GITHUB_OUTPUT
+      
+      - name: SHA256
+        run: sha256sum "${{ steps.iso.outputs.path }}" > "${{ steps.iso.outputs.path }}.sha256"
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aerofruitos-iso
+          path: |
+            ${{ steps.iso.outputs.path }}
+            ${{ steps.iso.outputs.path }}.sha256
+          retention-days: 30
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: always()
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Aerofruitos ${{ github.run_number }}
+          files: |
+            ${{ steps.iso.outputs.path }}
+            ${{ steps.iso.outputs.path }}.sha256
+          generate_release_notes: true

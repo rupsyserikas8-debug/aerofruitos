@@ -1,0 +1,20 @@
+# Aerofruitos GTK Theme - index.theme
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Aerofruitos
+Comment=Frutiger Aero theme for Aerofruitos OS
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Aerofruitos
+MetacityTheme=Aerofruitos
+IconTheme=Aerofruitos
+CursorTheme=Aerofruitos
+ButtonLayout=menu:minimize,maximize,close
+
+[GTK]
+GtkTheme=Aerofruitos
+IconTheme=Aerofruitos
+CursorTheme=Aerofruitos
+FontName=Segoe UI 10
+MonospaceFontName=JetBrains Mono 10

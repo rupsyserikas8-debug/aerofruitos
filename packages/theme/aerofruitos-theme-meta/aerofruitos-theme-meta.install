@@ -1,0 +1,76 @@
+post_install() {
+  # Apply theme defaults system-wide
+  echo "Applying Aerofruitos Frutiger Aero theme..."
+  
+  # Set GTK theme globally
+  if [ -f /usr/bin/gsettings ]; then
+    gsettings set org.gnome.desktop.interface gtk-theme 'Aerofruitos' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface icon-theme 'Aerofruitos' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface cursor-theme 'Aerofruitos' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface font-name 'Segoe UI 10' 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 10' 2>/dev/null || true
+  fi
+  
+  # Update font cache
+  fc-cache -f >/dev/null 2>&1 || true
+  
+  # Set Plymouth theme
+  if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    plymouth-set-default-theme aerofruitos -R 2>/dev/null || true
+  fi
+  
+  # Update initramfs for Plymouth
+  mkinitcpio -P linux-aerofruitos >/dev/null 2>&1 || true
+  
+  # Regenerate GRUB config with theme
+  if [ -f /etc/default/grub.d/99-aerofruitos-theme.cfg ]; then
+    grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1 || true
+  fi
+  
+  # Set SDDM theme
+  if [ -f /etc/sddm.conf.d/99-aerofruitos-theme.conf ]; then
+    systemctl reload sddm 2>/dev/null || true
+  fi
+  
+  # Apply Qt theme
+  if [ -f /etc/xdg/qt5ct/qt5ct.conf ]; then
+    sed -i 's/^style=.*/style=kvantum/' /etc/xdg/qt5ct/qt5ct.conf 2>/dev/null || true
+    sed -i 's/^icon_theme=.*/icon_theme=Aerofruitos/' /etc/xdg/qt5ct/qt5ct.conf 2>/dev/null || true
+  fi
+  
+  if [ -f /etc/xdg/qt6ct/qt6ct.conf ]; then
+    sed -i 's/^style=.*/style=kvantum/' /etc/xdg/qt6ct/qt6ct.conf 2>/dev/null || true
+    sed -i 's/^icon_theme=.*/icon_theme=Aerofruitos/' /etc/xdg/qt6ct/qt6ct.conf 2>/dev/null || true
+  fi
+  
+  # Update Kvantum theme
+  if command -v kvantummanager >/dev/null 2>&1; then
+    kvantummanager --set Aerofruitos 2>/dev/null || true
+  fi
+  
+  echo "Aerofruitos theme applied successfully!"
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  echo "Removing Aerofruitos theme..."
+  
+  # Reset to defaults
+  if [ -f /usr/bin/gsettings ]; then
+    gsettings reset org.gnome.desktop.interface gtk-theme 2>/dev/null || true
+    gsettings reset org.gnome.desktop.interface icon-theme 2>/dev/null || true
+    gsettings reset org.gnome.desktop.interface cursor-theme 2>/dev/null || true
+  fi
+  
+  # Reset Plymouth
+  plymouth-set-default-theme spinner -R 2>/dev/null || true
+  
+  # Reset GRUB
+  rm -f /etc/default/grub.d/99-aerofruitos-theme.cfg
+  grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1 || true
+  
+  fc-cache -f >/dev/null 2>&1 || true
+}

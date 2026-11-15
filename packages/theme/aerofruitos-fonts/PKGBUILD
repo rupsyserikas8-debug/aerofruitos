@@ -1,0 +1,192 @@
+# Maintainer: Aerofruitos Team
+pkgname=aerofruitos-fonts
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Frutiger Aero fonts for Aerofruitos (Segoe UI, JetBrains Mono, etc.)'
+arch=(any)
+url='https://github.com/aerofruitos/aerofruitos-fonts'
+license=(custom)
+depends=('fontconfig')
+makedepends=('unzip')
+source=(
+    'https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip'
+    'https://github.com/google/fonts/raw/main/ofl/jetbrainsmono/JetBrainsMono-Regular.ttf'
+)
+sha256sums=('SKIP' 'SKIP')
+install=aerofruitos-fonts.install
+
+package() {
+  install -dm755 "$pkgdir"/usr/share/fonts/aerofruitos/
+  
+  # JetBrains Mono (already downloaded)
+  for fttf in "$srcdir"/*.ttf; do
+    [ -f "$fttf" ] && install -m644 "$fttf" "$pkgdir"/usr/share/fonts/aerofruitos/
+  done
+  
+  # Segoe UI - Note: Microsoft font, not redistributable
+  # Users must provide their own or use alternatives
+  cat > "$pkgdir"/usr/share/fonts/aerofruitos/README_SEGOE_UI.txt << 'EOF'
+Segoe UI Font Notice
+====================
+
+Segoe UI is a Microsoft proprietary font and cannot be redistributed.
+To use Segoe UI with Aerofruitos:
+
+Option 1: Copy from Windows
+  Copy these files from Windows/Fonts/ to ~/.local/share/fonts/ or /usr/share/fonts/aerofruitos/:
+  - segoeui.ttf (Regular)
+  - segoeuib.ttf (Bold)
+  - segoeuii.ttf (Italic)
+  - segoeuiz.ttf (Semibold)
+
+Option 2: Use alternative fonts (installed by default)
+  The theme is configured to fall back to these fonts:
+  - Noto Sans (closest match, installed via noto-fonts)
+  - DejaVu Sans (installed via dejavu-fonts-ttf)
+  - Liberation Sans (installed via liberation-fonts-ttf)
+
+Option 3: Install from AUR
+  yay -S ttf-segoe-ui (requires Windows license)
+
+Fontconfig Configuration
+========================
+The theme includes fontconfig rules to:
+1. Prefer Segoe UI when available
+2. Fall back to Noto Sans
+3. Use JetBrains Mono for monospace
+4. Enable subpixel rendering (RGB)
+
+These are automatically applied via the GTK theme settings.
+EOF
+
+  # Fontconfig configuration
+  install -dm755 "$pkgdir"/etc/fonts/conf.avail/
+  cat > "$pkgdir"/etc/fonts/conf.avail/99-aerofruitos-fonts.conf << 'EOF'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <!-- Aerofruitos Font Configuration -->
+  
+  <!-- Preferred fonts for UI -->
+  <alias>
+    <family>sans-serif</family>
+    <prefer>
+      <family>Segoe UI</family>
+      <family>Noto Sans</family>
+      <family>DejaVu Sans</family>
+      <family>Liberation Sans</family>
+      <family>Cantarell</family>
+    </prefer>
+  </alias>
+  
+  <alias>
+    <family>serif</family>
+    <prefer>
+      <family>Segoe UI</family>
+      <family>Noto Serif</family>
+      <family>DejaVu Serif</family>
+      <family>Liberation Serif</family>
+    </prefer>
+  </alias>
+  
+  <alias>
+    <family>monospace</family>
+    <prefer>
+      <family>JetBrains Mono</family>
+      <family>Noto Sans Mono</family>
+      <family>DejaVu Sans Mono</family>
+      <family>Liberation Mono</family>
+      <family>Fira Code</family>
+    </prefer>
+  </alias>
+  
+  <!-- Font substitutions for common UI fonts -->
+  <match target="pattern">
+    <test name="family"><string>Segoe UI</string></test>
+    <edit name="family" mode="prepend" binding="strong">
+      <string>Segoe UI</string>
+      <string>Noto Sans</string>
+      <string>DejaVu Sans</string>
+    </edit>
+  </match>
+  
+  <match target="pattern">
+    <test name="family"><string>Helvetica</string></test>
+    <edit name="family" mode="prepend" binding="strong">
+      <string>Segoe UI</string>
+      <string>Noto Sans</string>
+      <string>DejaVu Sans</string>
+    </edit>
+  </match>
+  
+  <match target="pattern">
+    <test name="family"><string>Arial</string></test>
+    <edit name="family" mode="prepend" binding="strong">
+      <string>Segoe UI</string>
+      <string>Noto Sans</string>
+      <string>DejaVu Sans</string>
+    </edit>
+  </match>
+  
+  <match target="pattern">
+    <test name="family"><string>Tahoma</string></test>
+    <edit name="family" mode="prepend" binding="strong">
+      <string>Segoe UI</string>
+      <string>Noto Sans</string>
+      <string>DejaVu Sans</string>
+    </edit>
+  </match>
+  
+  <!-- Rendering settings for Frutiger Aero look -->
+  <match target="font">
+    <edit name="antialias" mode="assign"><bool>true</bool></edit>
+    <edit name="hinting" mode="assign"><bool>true</bool></edit>
+    <edit name="hintstyle" mode="assign"><const>hintslight</const></edit>
+    <edit name="rgba" mode="assign"><const>rgb</const></edit>
+    <edit name="lcdfilter" mode="assign"><const>lcddefault</const></edit>
+    <edit name="autohint" mode="assign"><bool>false</bool></edit>
+  </match>
+  
+  <!-- Slightly larger default size for readability -->
+  <match target="pattern">
+    <test qual="any" name="size" compare="not_eq"><double>0</double></test>
+    <edit name="size" mode="assign"><double>10</double></edit>
+  </match>
+</fontconfig>
+EOF
+  
+  # Symlink to conf.d
+  install -dm755 "$pkgdir"/etc/fonts/conf.d/
+  ln -sf ../conf.avail/99-aerofruitos-fonts.conf "$pkgdir"/etc/fonts/conf.d/99-aerofruitos-fonts.conf
+  
+  # Install script to regenerate font cache
+  cat > "$pkgdir"/usr/bin/aerofruitos-font-setup << 'EOF'
+#!/bin/bash
+# Aerofruitos Font Setup
+# Regenerates font cache and validates configuration
+
+echo "Regenerating font cache..."
+fc-cache -f -v
+
+echo "Validating fontconfig..."
+fc-match -v "sans-serif" | head -20
+
+echo "Checking for Segoe UI..."
+if fc-match "Segoe UI" | grep -q "Segoe UI"; then
+    echo "✓ Segoe UI found"
+else
+    echo "⚠ Segoe UI not found - using fallback (Noto Sans)"
+    echo "  To install Segoe UI, copy from Windows or install ttf-segoe-ui from AUR"
+fi
+
+echo "Checking for JetBrains Mono..."
+if fc-match "JetBrains Mono" | grep -q "JetBrains Mono"; then
+    echo "✓ JetBrains Mono found"
+else
+    echo "⚠ JetBrains Mono not found"
+fi
+
+echo "Font setup complete"
+EOF
+  chmod +x "$pkgdir"/usr/bin/aerofruitos-font-setup
+}
