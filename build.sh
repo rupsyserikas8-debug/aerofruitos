@@ -1,7 +1,6 @@
 #!/bin/bash
 # Aerofruitos Build Script
-# Run on Arch Linux (or Arch-based) as regular user with sudo access
-# Builds all packages and creates ISO
+# Works in Docker (as root) and locally (as user with sudo)
 
 set -euo pipefail
 
@@ -18,6 +17,17 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="$PROJECT_ROOT/build"
 PKG_DEST="$BUILD_DIR/packages"
 ISO_OUT="$BUILD_DIR/iso_out"
+
+# Detect if running as root (Docker) or user (local)
+IS_ROOT=false
+if [[ $EUID -eq 0 ]]; then
+    IS_ROOT=true
+fi
+
+SUDO=""
+if [[ "$IS_ROOT" == "false" ]]; then
+    SUDO="sudo"
+fi
 
 log() { echo -e "${CYAN}[BUILD]${NC} $*"; }
 success() { echo -e "${GREEN}[OK]${NC} $*"; }
@@ -36,14 +46,11 @@ check_prereqs() {
         error "mkarchiso not found. Install archiso"
     fi
     
-    if [[ $EUID -eq 0 ]]; then
-        error "Don't run as root! Run as regular user with sudo access"
-    fi
-    
-    # Check sudo access
-    if ! sudo -n true 2>/dev/null; then
-        log "Sudo access needed for ISO build. Please enter password when prompted."
-        sudo -v || error "Sudo required"
+    if [[ "$IS_ROOT" == "false" ]]; then
+        if ! $SUDO -n true 2>/dev/null; then
+            log "Sudo access needed for ISO build."
+            $SUDO -v || error "Sudo required"
+        fi
     fi
     
     success "Prerequisites OK"
@@ -54,7 +61,6 @@ setup_dirs() {
     log "Setting up build directories..."
     mkdir -p "$BUILD_DIR" "$PKG_DEST" "$ISO_OUT"
     
-    # Configure makepkg to use our package cache
     export PKGDEST="$PKG_DEST"
     export SRCDEST="$BUILD_DIR/src"
     export LOGDEST="$BUILD_DIR/logs"
@@ -72,13 +78,20 @@ build_package() {
     log "Building $pkg_name..."
     
     cd "$pkg_dir"
-    
-    # Clean previous builds
     rm -f *.pkg.tar.zst *.pkg.tar.xz *.log
     
-    # Build package
-    if makepkg -sf --noconfirm --skippgpcheck 2>&1 | tee "$LOGDEST/$pkg_name.log"; then
-        # Move built packages to cache
+    # Run makepkg as builder user if root, otherwise current user
+    local makepkg_cmd="makepkg -sf --noconfirm --skippgpcheck"
+    if [[ "$IS_ROOT" == "true" ]]; then
+        # Need a non-root user for makepkg
+        if ! id builder &>/dev/null; then
+            useradd -m -G wheel builder
+            echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+        fi
+        makepkg_cmd="sudo -u builder $makepkg_cmd"
+    fi
+    
+    if $makepkg_cmd 2>&1 | tee "$LOGDEST/$pkg_name.log"; then
         mv *.pkg.tar.zst "$PKG_DEST"/ 2>/dev/null || true
         success "$pkg_name built successfully"
     else
@@ -90,7 +103,6 @@ build_package() {
 build_all_packages() {
     log "Building all packages..."
     
-    # Define build order (dependencies first)
     local packages=(
         "packages/base/aerofruitos-keyring"
         "packages/base/aerofruitos-mirrorlist"
@@ -123,7 +135,6 @@ build_all_packages() {
         fi
     done
     
-    # Create local repository database
     log "Creating local package repository..."
     cd "$PKG_DEST"
     repo-add aerofruitos.db.tar.gz *.pkg.tar.zst 2>/dev/null || true
@@ -136,95 +147,24 @@ build_iso() {
     
     cd "$PROJECT_ROOT/iso"
     
-    # Copy built packages to ISO profile for inclusion
     mkdir -p work/airootfs/var/cache/pacman/aerofruitos
     cp "$PKG_DEST"/*.pkg.tar.zst work/airootfs/var/cache/pacman/aerofruitos/ 2>/dev/null || true
     
-    # Build ISO
-    sudo mkarchiso -v -w "$BUILD_DIR/archiso-work" -o "$ISO_OUT" . 2>&1 | tee "$LOGDEST/iso-build.log"
+    # mkarchiso needs to run as root (we are root in Docker, or use sudo locally)
+    $SUDO mkarchiso -v -w "$BUILD_DIR/archiso-work" -o "$ISO_OUT" . 2>&1 | tee "$LOGDEST/iso-build.log"
     
-    # Find the built ISO
     local iso_file=$(find "$ISO_OUT" -name "aerofruitos-*.iso" -type f | head -1)
     
     if [[ -f "$iso_file" ]]; then
         success "ISO built successfully!"
         log "ISO location: $iso_file"
         
-        # Generate checksums
         cd "$(dirname "$iso_file")"
         sha256sum "$(basename "$iso_file")" > "$(basename "$iso_file").sha256"
         log "SHA256: $(cat "$(basename "$iso_file").sha256")"
     else
         error "ISO not found in output directory"
     fi
-}
-
-# Test ISO in QEMU
-test_iso() {
-    local iso_file=$(find "$ISO_OUT" -name "aerofruitos-*.iso" -type f | head -1)
-    
-    if [[ ! -f "$iso_file" ]]; then
-        error "No ISO found to test"
-    fi
-    
-    log "Testing ISO in QEMU (2GB RAM, 2 CPUs)..."
-    log "Press Ctrl+Alt+G to release mouse, Ctrl+Alt+Delete to force quit"
-    
-    qemu-system-x86_64 \
-        -enable-kvm \
-        -m 2G \
-        -smp 2 \
-        -cpu host \
-        -drive file="$iso_file",media=cdrom,readonly=on \
-        -boot d \
-        -display gtk,gl=on \
-        -vga qxl \
-        -device virtio-net-pci \
-        -netdev user,id=net0 \
-        -soundhw hda \
-        -usb \
-        -device usb-tablet
-}
-
-# Clean build artifacts
-clean_build() {
-    log "Cleaning build artifacts..."
-    rm -rf "$BUILD_DIR"
-    find "$PROJECT_ROOT/packages" -name "*.pkg.tar.zst" -delete
-    find "$PROJECT_ROOT/packages" -name "*.pkg.tar.xz" -delete
-    find "$PROJECT_ROOT/packages" -name "*.log" -delete
-    find "$PROJECT_ROOT/packages" -name "pkg" -type d -exec rm -rf {} + 2>/dev/null || true
-    find "$PROJECT_ROOT/packages" -name "src" -type d -exec rm -rf {} + 2>/dev/null || true
-    success "Clean complete"
-}
-
-# Show help
-show_help() {
-    cat << EOF
-Aerofruitos Build Script
-
-Usage: $0 [command]
-
-Commands:
-  build       Build all packages and ISO (default)
-  packages    Build packages only
-  iso         Build ISO only (requires packages)
-  test        Test ISO in QEMU
-  clean       Clean build artifacts
-  help        Show this help
-
-Environment Variables:
-  SKIP_PACKAGES=1   Skip package building (use existing)
-  SKIP_ISO=1        Skip ISO building
-  SKIP_TEST=1       Skip QEMU test
-
-Examples:
-  $0                    # Full build
-  $0 packages           # Build packages only
-  $0 iso                # Build ISO from existing packages
-  $0 test               # Test latest ISO
-  $0 clean              # Clean everything
-EOF
 }
 
 # Main
@@ -248,14 +188,29 @@ main() {
             setup_dirs
             build_iso
             ;;
-        test)
-            test_iso
-            ;;
         clean)
-            clean_build
+            log "Cleaning build artifacts..."
+            rm -rf "$BUILD_DIR"
+            find "$PROJECT_ROOT/packages" -name "*.pkg.tar.zst" -delete
+            find "$PROJECT_ROOT/packages" -name "*.pkg.tar.xz" -delete
+            find "$PROJECT_ROOT/packages" -name "*.log" -delete
+            find "$PROJECT_ROOT/packages" -name "pkg" -type d -exec rm -rf {} + 2>/dev/null || true
+            find "$PROJECT_ROOT/packages" -name "src" -type d -exec rm -rf {} + 2>/dev/null || true
+            success "Clean complete"
             ;;
         help|--help|-h)
-            show_help
+            cat << EOF
+Aerofruitos Build Script
+
+Usage: $0 [command]
+
+Commands:
+  build       Build all packages and ISO (default)
+  packages    Build packages only
+  iso         Build ISO only (requires packages)
+  clean       Clean build artifacts
+  help        Show this help
+EOF
             ;;
         *)
             error "Unknown command: $cmd. Use '$0 help' for usage."
