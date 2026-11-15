@@ -29,7 +29,6 @@ jobs:
         run: |
           docker run --rm --privileged \
             -v "${{ github.workspace }}:/build" \
-            -w /build/aerofruitos \
             archlinux:base-devel \
             /bin/bash -c "
               set -euo pipefail
@@ -56,7 +55,7 @@ jobs:
                 yay -S --noconfirm gtk-engine-murrine xcursorgen
               '
               
-              # Build the ISO
+              # Build the ISO - explicitly cd to project directory
               cd /build/aerofruitos
               chmod +x build.sh
               ./build.sh
