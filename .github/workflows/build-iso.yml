@@ -43,16 +43,18 @@ jobs:
                 cryptsetup lvm2 btrfs-progs f2fs-tools \
                 reflector base-devel
               
-              # Install AUR helper (yay)
-              cd /tmp
-              git clone https://aur.archlinux.org/yay.git
-              cd yay
-              makepkg -si --noconfirm
-              
-              # Install AUR packages as non-root user
+              # Create builder user for AUR packages
               useradd -m -G wheel builder
               echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-              sudo -u builder yay -S --noconfirm gtk-engine-murrine xcursorgen
+              
+              # Install AUR packages as builder user
+              sudo -u builder bash -c '
+                cd /tmp
+                git clone https://aur.archlinux.org/yay.git
+                cd yay
+                makepkg -si --noconfirm
+                yay -S --noconfirm gtk-engine-murrine xcursorgen
+              '
               
               # Build the ISO
               cd /build/aerofruitos
