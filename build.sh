@@ -13,7 +13,8 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+# PROJECT_ROOT is the script directory itself (repo root), not its parent
+PROJECT_ROOT="$SCRIPT_DIR"
 BUILD_DIR="$PROJECT_ROOT/build"
 PKG_DEST="$BUILD_DIR/packages"
 ISO_OUT="$BUILD_DIR/iso_out"
