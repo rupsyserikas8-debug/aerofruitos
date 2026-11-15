@@ -13,7 +13,6 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# PROJECT_ROOT is the script directory itself (repo root), not its parent
 PROJECT_ROOT="$SCRIPT_DIR"
 BUILD_DIR="$PROJECT_ROOT/build"
 PKG_DEST="$BUILD_DIR/packages"
@@ -68,6 +67,16 @@ setup_dirs() {
     export BUILDDIR="$BUILD_DIR/build"
     
     mkdir -p "$SRCDEST" "$LOGDEST" "$BUILDDIR"
+    
+    # Ensure builder user can write to build directories
+    if [[ "$IS_ROOT" == "true" ]]; then
+        if ! id builder &>/dev/null; then
+            useradd -m -G wheel builder
+            echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+        fi
+        chown -R builder:builder "$BUILD_DIR"
+    fi
+    
     success "Build directories ready"
 }
 
@@ -84,11 +93,6 @@ build_package() {
     # Run makepkg as builder user if root, otherwise current user
     local makepkg_cmd="makepkg -sf --noconfirm --skippgpcheck"
     if [[ "$IS_ROOT" == "true" ]]; then
-        # Need a non-root user for makepkg
-        if ! id builder &>/dev/null; then
-            useradd -m -G wheel builder
-            echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-        fi
         makepkg_cmd="sudo -u builder $makepkg_cmd"
     fi
     
