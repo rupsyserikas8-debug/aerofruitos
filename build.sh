@@ -68,7 +68,7 @@ setup_dirs() {
     
     mkdir -p "$SRCDEST" "$LOGDEST" "$BUILDDIR"
     
-    # Ensure builder user can write to build directories
+    # Ensure builder user can write to ALL build directories (packages, src, build, logs)
     if [[ "$IS_ROOT" == "true" ]]; then
         if ! id builder &>/dev/null; then
             useradd -m -G wheel builder
