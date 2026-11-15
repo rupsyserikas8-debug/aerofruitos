@@ -55,8 +55,8 @@ jobs:
                 yay -S --noconfirm gtk-engine-murrine xcursorgen
               '
               
-              # Build the ISO - explicitly cd to project directory
-              cd /build/aerofruitos
+              # Build the ISO - repo is mounted at /build
+              cd /build
               chmod +x build.sh
               ./build.sh
             "
