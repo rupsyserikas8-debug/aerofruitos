@@ -36,7 +36,7 @@ jobs:
               # Install base dependencies
               pacman -Sy --noconfirm archiso git python python-textual \
                 xmlto kmod bc libelf cpio perl tar xz \
-                gtk3 gtk4 sassc meson \
+                gtk2 gtk3 gtk4 intltool sassc meson xorg-xcursorgen \
                 imagemagick inkscape fontconfig unzip \
                 qemu-system-x86 ovmf dosfstools gptfdisk parted \
                 cryptsetup lvm2 btrfs-progs f2fs-tools \
@@ -46,13 +46,14 @@ jobs:
               useradd -m -G wheel builder
               echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
               
-              # Install AUR packages as builder user
+              # Build the AUR GTK engine into the local ISO package repository
+              mkdir -p /build/build/packages
+              chown -R builder:builder /build/build
               sudo -u builder bash -c '
                 cd /tmp
-                git clone https://aur.archlinux.org/yay.git
-                cd yay
-                makepkg -si --noconfirm
-                yay -S --noconfirm gtk-engine-murrine xcursorgen
+                git clone --depth 1 https://aur.archlinux.org/gtk-engine-murrine.git
+                cd gtk-engine-murrine
+                PKGDEST=/build/build/packages makepkg -si --noconfirm --skippgpcheck
               '
               
               # Build the ISO - repo is mounted at /build
