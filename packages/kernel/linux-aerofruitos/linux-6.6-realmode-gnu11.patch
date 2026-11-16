@@ -1,0 +1,11 @@
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 5dc1bcb..d28d9b1 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -43,6 +43,7 @@ export REALMODE_CFLAGS
+ 
+ REALMODE_CFLAGS += -ffreestanding
++REALMODE_CFLAGS += -std=gnu11
+ REALMODE_CFLAGS += -fno-stack-protector
+ REALMODE_CFLAGS += -Wno-address-of-packed-member
+ REALMODE_CFLAGS += $(cc_stack_align4)
