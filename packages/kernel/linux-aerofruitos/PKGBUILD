@@ -1,7 +1,7 @@
 # Maintainer: Aerofruitos Team
 pkgbase=linux-aerofruitos
 pkgver=6.6.52
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux kernel optimized for Aerofruitos (Q6600/GT9600/2GB RAM)'
 arch=(x86_64)
 url='https://kernel.org'
@@ -39,7 +39,7 @@ prepare() {
 
 build() {
   cd $_srcname
-  make all
+  make KCFLAGS=-std=gnu11 all
   make -C tools/objtool
 }
 
