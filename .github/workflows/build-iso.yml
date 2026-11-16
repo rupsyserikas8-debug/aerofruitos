@@ -64,7 +64,7 @@ jobs:
       - name: Find ISO
         id: iso
         run: |
-          ISO=$(find aerofruitos/build/iso_out -name "*.iso" | head -1)
+          ISO=$(find build/iso_out -name "*.iso" | head -1)
           if [ -z "$ISO" ]; then
             echo "ISO not found!"
             exit 1
@@ -86,7 +86,6 @@ jobs:
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: always()
         with:
           tag_name: v${{ github.run_number }}
           name: Aerofruitos ${{ github.run_number }}
