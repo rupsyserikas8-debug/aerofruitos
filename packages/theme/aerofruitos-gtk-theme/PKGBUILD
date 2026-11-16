@@ -2,11 +2,11 @@
 pkgname=aerofruitos-gtk-theme
 pkgver=1.0.0
 pkgrel=1
-pkgdesc='Frutiger Aero GTK2/3/4 theme for Aerofruitos'
+pkgdesc='Frutiger Aero GTK3/4 theme for Aerofruitos'
 arch=(any)
 url='https://github.com/aerofruitos/aerofruitos-gtk-theme'
 license=(GPL3)
-depends=('gtk3' 'gtk4' 'gtk-engine-murrine' 'gtk-engines')
+depends=('gtk3' 'gtk4')
 makedepends=('git' 'sassc' 'meson')
 optdepends=('kvantum-qt5: Qt5 theme support'
             'kvantum-qt6: Qt6 theme support'
@@ -17,10 +17,6 @@ sha256sums=('SKIP')
 
 package() {
   cd aerofruitos-gtk-theme
-  
-  # Install GTK2 theme
-  install -dm755 "$pkgdir"/usr/share/themes/Aerofruitos/gtk-2.0
-  cp -r gtk-2.0/* "$pkgdir"/usr/share/themes/Aerofruitos/gtk-2.0/
   
   # Install GTK3 theme
   install -dm755 "$pkgdir"/usr/share/themes/Aerofruitos/gtk-3.0
@@ -38,30 +34,9 @@ package() {
   install -Dm644 index.theme "$pkgdir"/usr/share/themes/Aerofruitos/index.theme
   
   # Install GTK settings defaults
-  install -dm755 "$pkgdir"/etc/gtk-2.0
   install -dm755 "$pkgdir"/etc/gtk-3.0
   install -dm755 "$pkgdir"/etc/gtk-4.0
   
-  # GTK2 settings
-  cat > "$pkgdir"/etc/gtk-2.0/gtkrc << 'EOF'
-# Aerofruitos GTK2 settings
-gtk-theme-name = "Aerofruitos"
-gtk-icon-theme-name = "Aerofruitos"
-gtk-font-name = "Segoe UI 10"
-gtk-cursor-theme-name = "Aerofruitos"
-gtk-cursor-theme-size = 24
-gtk-toolbar-style = GTK_TOOLBAR_ICONS
-gtk-toolbar-icon-size = GTK_ICON_SIZE_LARGE_TOOLBAR
-gtk-button-images = 1
-gtk-menu-images = 1
-gtk-enable-event-sounds = 1
-gtk-enable-input-feedback-sounds = 1
-gtk-xft-antialias = 1
-gtk-xft-hinting = 1
-gtk-xft-hintstyle = "hintslight"
-gtk-xft-rgba = "rgb"
-EOF
-
   # GTK3 settings
   cat > "$pkgdir"/etc/gtk-3.0/settings.ini << 'EOF'
 [Settings]

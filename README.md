@@ -74,8 +74,8 @@ sudo dd if=aerofruitos-*.iso of=/dev/sdX bs=4M status=progress && sync
 # Install build dependencies
 sudo pacman -S --needed base-devel archiso git python python-textual \
   xmlto kmod inetutils bc libelf cpio perl tar xz \
-  gtk3 gtk4 gtk-engine-murrine gtk-engines sassc meson \
-  imagemagick inkscape xcursorgen fontconfig unzip \
+  gtk3 gtk4 sassc meson \
+  imagemagick inkscape xorg-xcursorgen fontconfig unzip \
   qemu virt-manager ovmf dosfstools gptfdisk parted
 ```
 

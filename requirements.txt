@@ -27,13 +27,11 @@ xz
 # Theme build
 gtk3
 gtk4
-gtk-engine-murrine
-gtk-engines
 sassc
 meson
 imagemagick
 inkscape
-xcursorgen
+xorg-xcursorgen
 
 # Font tools
 fontconfig
