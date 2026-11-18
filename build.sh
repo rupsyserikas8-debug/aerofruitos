@@ -124,7 +124,6 @@ build_all_packages() {
     local packages=(
         "packages/base/aerofruitos-keyring"
         "packages/base/aerofruitos-mirrorlist"
-        "packages/kernel/linux-aerofruitos"
         "packages/base/base-system"
         
         "packages/theme/aerofruitos-gtk-theme"

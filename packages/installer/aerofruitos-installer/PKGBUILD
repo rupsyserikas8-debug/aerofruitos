@@ -1,14 +1,13 @@
 # Maintainer: Aerofruitos Team
 pkgname=aerofruitos-installer
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Aerofruitos Custom TUI Installer - Frutiger Aero Edition'
 arch=(any)
 url='https://github.com/aerofruitos/aerofruitos-installer'
 license=(GPL3)
 depends=('python' 'python-textual' 'pacman' 'arch-install-scripts' 'parted' 'util-linux' 'e2fsprogs' 'dosfstools' 'cryptsetup' 'lvm2' 'btrfs-progs' 'f2fs-tools')
-optdepends=('nvidia-340xx: NVIDIA driver for GT9600 (AUR)')
-source=('aerofruitos-installer.py')
+source=('../../../installer/aerofruitos-installer.py')
 sha256sums=('SKIP')
 
 package() {
@@ -22,7 +21,7 @@ name: Minimal
 description: Base system + i3 window manager only
 packages:
   - base
-  - linux-aerofruitos
+  - linux
   - linux-firmware
   - base-devel
   - i3-wm
@@ -50,7 +49,7 @@ name: Standard
 description: Full desktop with XFCE + i3 + essential apps (recommended)
 packages:
   - base
-  - linux-aerofruitos
+  - linux
   - linux-firmware
   - base-devel
   - xfce4
@@ -122,7 +121,7 @@ name: Full
 description: Everything including development tools and virtualization
 packages:
   - base
-  - linux-aerofruitos
+  - linux
   - linux-firmware
   - base-devel
   - xfce4

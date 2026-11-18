@@ -35,7 +35,7 @@ jobs:
               
               # Install base dependencies
               pacman -Sy --noconfirm archiso git python python-textual \
-                xmlto kmod bc libelf cpio perl tar xz \
+                tar xz \
                 gtk3 gtk4 sassc meson xorg-xcursorgen \
                 imagemagick inkscape fontconfig unzip \
                 qemu-system-x86 ovmf dosfstools gptfdisk parted \

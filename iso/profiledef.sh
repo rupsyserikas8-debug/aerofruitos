@@ -17,7 +17,7 @@ airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '15')
 packages=(
     # Base
     "base"
-    "linux-aerofruitos"
+    "linux"
     "linux-firmware"
     "systemd"
     "systemd-sysvcompat"
@@ -87,13 +87,10 @@ packages=(
     "alsa-firmware"
     "pavucontrol"
     
-    # GPU Drivers (both for user choice)
+    # Open-source GPU drivers
     "mesa"
     "vulkan-radeon"
     "vulkan-intel"
-    "nvidia-340xx"
-    "nvidia-340xx-utils"
-    "nvidia-340xx-dkms"
     
     # XFCE Desktop
     "xfce4"

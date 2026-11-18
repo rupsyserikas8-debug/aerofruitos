@@ -1,7 +1,7 @@
 # Maintainer: Aerofruitos Team
 pkgname=aerofruitos-theme-meta
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Meta-package for complete Aerofruitos Frutiger Aero theme stack'
 arch=(any)
 url='https://github.com/aerofruitos/aerofruitos-theme'

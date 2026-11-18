@@ -11,7 +11,7 @@ post_install() {
   fi
   
   # Regenerate initramfs
-  mkinitcpio -P linux-aerofruitos
+  mkinitcpio -P
 }
 
 post_upgrade() {

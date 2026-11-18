@@ -20,7 +20,7 @@ post_install() {
   fi
   
   # Update initramfs for Plymouth
-  mkinitcpio -P linux-aerofruitos >/dev/null 2>&1 || true
+  mkinitcpio -P >/dev/null 2>&1 || true
   
   # Regenerate GRUB config with theme
   if [ -f /etc/default/grub.d/99-aerofruitos-theme.cfg ]; then

@@ -1,7 +1,7 @@
 # Maintainer: Aerofruitos Team
 pkgname=base-system
 pkgver=20261115
-pkgrel=1
+pkgrel=2
 pkgdesc='Meta-package for Aerofruitos base system'
 arch=(any)
 url='https://github.com/aerofruitos/aerofruitos'
@@ -9,7 +9,7 @@ license=(GPL)
 depends=(
   # Base system
   'base'
-  'linux-aerofruitos'
+  'linux'
   'linux-firmware'
   'systemd'
   'systemd-sysvcompat'

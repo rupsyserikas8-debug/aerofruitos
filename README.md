@@ -5,16 +5,19 @@
 ![Desktop](https://img.shields.io/badge/DEs-XFCE%20%2B%20i3-48CAE4?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-GPL%20v3-28A745?style=for-the-badge)
 
-A daily-driver Linux distribution with full **Frutiger Aero** theming, optimized for legacy hardware (Core 2 Quad Q6600, NVIDIA GT9600, 2GB RAM).
+A daily-driver Linux distribution with full **Frutiger Aero** theming, designed to support legacy hardware (Core 2 Quad Q6600, NVIDIA GT9600, 2GB RAM).
+
+Aerofruitos is based on Arch Linux: it uses Arch's official packages and kernel,
+with Aerofruitos packages adding its desktop setup, themes, installer, and branding.
 
 ## ✨ Features
 
 - **🎨 Full Frutiger Aero Theme**: Boot (Plymouth) → GRUB → Login (SDDM) → Desktop (XFCE + i3) → Apps
 - **🖥 Dual Desktop Environments**: XFCE (traditional) + i3 (tiling WM) - both Aero-themed
-- **⚡ Optimized Kernel**: Custom config for Q6600, GT9600, 2GB RAM with zswap, transparent hugepages
+- **⚡ Arch Kernel**: Uses Arch's prebuilt Linux kernel for compatibility and faster ISO builds
 - **📦 Hybrid Package System**: Arch base + custom PKGBUILDs (source builds, no binary repo needed)
 - **🔧 Lightweight TUI Installer**: Custom Python installer (<100MB RAM) - no Calamares bloat
-- **🎮 GPU Driver Choice**: Nouveau (open) or nvidia-340xx (proprietary) selectable at install
+- **🎮 GPU Support**: Mesa and the open-source Nouveau driver are included by default
 - **🌐 Modern Stack**: PipeWire, NetworkManager, systemd, GRUB2, Plymouth
 
 ## 📋 Target Hardware
@@ -62,7 +65,7 @@ sudo dd if=aerofruitos-*.iso of=/dev/sdX bs=4M status=progress && sync
    - Keyboard layout
    - Disk selection (auto-partition or manual)
    - Profile: **Minimal** (i3 only) / **Standard** (XFCE+i3+apps) / **Full** (dev tools)
-   - GPU driver: Nouveau or nvidia-340xx
+   - GPU driver: Nouveau (included)
    - User setup
 5. Reboot and enjoy!
 
@@ -72,11 +75,7 @@ sudo dd if=aerofruitos-*.iso of=/dev/sdX bs=4M status=progress && sync
 
 ```bash
 # Install build dependencies
-sudo pacman -S --needed base-devel archiso git python python-textual \
-  xmlto kmod inetutils bc libelf cpio perl tar xz \
-  gtk3 gtk4 sassc meson \
-  imagemagick inkscape xorg-xcursorgen fontconfig unzip \
-  qemu virt-manager ovmf dosfstools gptfdisk parted
+sudo pacman -S --needed base-devel archiso git
 ```
 
 ### Build Process
@@ -86,41 +85,14 @@ sudo pacman -S --needed base-devel archiso git python python-textual \
 git clone https://github.com/aerofruitos/aerofruitos.git
 cd aerofruitos
 
-# Build all packages (in order)
-cd packages/kernel/linux-aerofruitos && makepkg -si
-cd ../../base/aerofruitos-keyring && makepkg -si
-cd ../aerofruitos-mirrorlist && makepkg -si
-cd ../base-system && makepkg -si
-
-# Theme packages
-cd ../../theme/aerofruitos-gtk-theme && makepkg -si
-cd ../aerofruitos-icon-theme && makepkg -si
-cd ../aerofruitos-cursor-theme && makepkg -si
-cd ../aerofruitos-fonts && makepkg -si
-cd ../aerofruitos-wallpapers && makepkg -si
-cd ../plymouth-theme-aerofruitos && makepkg -si
-cd ../grub-theme-aerofruitos && makepkg -si
-cd ../sddm-theme-aerofruitos && makepkg -si
-cd ../aerofruitos-theme-meta && makepkg -si
-
-# DE configs
-cd ../../de-xfce/xfce4-aerofruitos-config && makepkg -si
-cd ../../de-i3/i3-aerofruitos-config && makepkg -si
-
-# Installer
-cd ../../installer/aerofruitos-installer && makepkg -si
-
-# Apps
-cd ../../apps/firefox-aerofruitos-theme && makepkg -si
-
-# Build ISO (requires root)
-cd ../../iso
-sudo ./build.sh
+# Build the custom packages and ISO in one step
+chmod +x build.sh
+./build.sh build
 ```
 
 ### Build Output
 
-ISO will be in `/out/aerofruitos-YYYY.MM.DD-x86_64.iso`
+The ISO will be in `build/iso_out/`.
 
 ## 📁 Project Structure
 
@@ -132,7 +104,7 @@ aerofruitos/
 │   │   ├── aerofruitos-mirrorlist
 │   │   └── base-system          # Meta-package
 │   ├── kernel/
-│   │   └── linux-aerofruitos    # Custom kernel (6.6 LTS)
+│   │   └── linux-aerofruitos    # Optional custom kernel (not used by the default ISO)
 │   ├── theme/                   # Frutiger Aero theme stack
 │   │   ├── aerofruitos-gtk-theme    # GTK2/3/4 theme
 │   │   ├── aerofruitos-icon-theme   # Icon theme
@@ -217,19 +189,12 @@ aerofruitos/
 ## 🐛 Troubleshooting
 
 ### GT9600 Nouveau Issues
-```bash
-# If Nouveau fails, install nvidia-340xx
-yay -S nvidia-340xx nvidia-340xx-dkms
-
-# Or boot with kernel parameter:
-# modprobe.blacklist=nouveau
-```
+The ISO uses the open-source Nouveau driver with Arch's stock kernel. The old
+`nvidia-340xx` driver is not included; it is an unsupported legacy AUR package
+and may not build with current Arch kernels.
 
 ### Low Memory (2GB RAM)
 ```bash
-# Enable zswap (already in kernel config)
-echo 1 > /sys/module/zswap/parameters/enabled
-
 # Reduce swappiness
 echo 10 > /proc/sys/vm/swappiness
 

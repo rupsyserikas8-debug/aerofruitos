@@ -1,5 +1,5 @@
 base
-linux-aerofruitos
+linux
 linux-firmware
 systemd
 systemd-sysvcompat
@@ -59,9 +59,6 @@ pavucontrol
 mesa
 vulkan-radeon
 vulkan-intel
-nvidia-340xx
-nvidia-340xx-utils
-nvidia-340xx-dkms
 xfce4
 xfce4-goodies
 xfwm4

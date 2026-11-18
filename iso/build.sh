@@ -19,7 +19,7 @@ airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '15')
 packages=(
     # Base
     "base"
-    "linux-aerofruitos"
+    "linux"
     "linux-firmware"
     "systemd"
     "systemd-sysvcompat"
@@ -89,13 +89,10 @@ packages=(
     "alsa-firmware"
     "pavucontrol"
     
-    # GPU Drivers (both for user choice)
+    # Open-source GPU drivers
     "mesa"
     "vulkan-radeon"
     "vulkan-intel"
-    "nvidia-340xx"
-    "nvidia-340xx-utils"
-    "nvidia-340xx-dkms"
     
     # XFCE Desktop
     "xfce4"
@@ -300,7 +297,7 @@ chown -R 1000:1000 work/airootfs/home/liveuser/
 sed -i 's/HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)/HOOKS=(base udev autodetect modconf block filesystems keyboard fsck plymouth)/' work/airootfs/etc/mkinitcpio.conf
 
 # Generate initramfs
-mkinitcpio -p linux-aerofruitos --root=work/airootfs/
+mkinitcpio -p linux --root=work/airootfs/
 
 # Build ISO
 mkarchiso -v -w /tmp/archiso-build -o /out .

@@ -75,7 +75,6 @@ class InstallConfig:
     partition_scheme: str = "auto"  # auto, manual
     filesystem: str = "ext4"
     bootloader: str = "grub"
-    gpu_driver: str = "nouveau"  # nouveau, nvidia-340xx
     desktop_env: str = "both"  # xfce, i3, both
     profile: str = "standard"  # minimal, standard, full
     enable_sudo: bool = True
@@ -257,7 +256,7 @@ class AerofruitosInstaller:
     def get_profile_packages(self) -> List[str]:
         """Get package list for selected profile"""
         base = [
-            "base", "linux-aerofruitos", "linux-firmware", "base-devel",
+            "base", "linux", "linux-firmware", "base-devel",
             "systemd", "systemd-sysvcompat", "grub", "efibootmgr",
             "networkmanager", "network-manager-applet",
             "pipewire", "pipewire-pulse", "wireplumber", "alsa-utils",
@@ -265,10 +264,7 @@ class AerofruitosInstaller:
             "intel-ucode", "amd-ucode",
         ]
         
-        if self.config.gpu_driver == "nvidia-340xx":
-            base.extend(["nvidia-340xx", "nvidia-340xx-utils", "nvidia-340xx-dkms"])
-        else:
-            base.append("mesa")
+        base.append("mesa")
         
         if self.config.desktop_env in ["xfce", "both"]:
             base.extend([
@@ -353,13 +349,6 @@ class AerofruitosInstaller:
         
         for svc in services:
             chroot_cmds.append(f"systemctl enable {svc}")
-        
-        # GPU driver config
-        if self.config.gpu_driver == "nvidia-340xx":
-            chroot_cmds.extend([
-                "sed -i 's/MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf",
-                "mkinitcpio -P linux-aerofruitos"
-            ])
         
         # Plymouth theme
         chroot_cmds.append("plymouth-set-default-theme aerofruitos -R")
@@ -611,7 +600,7 @@ def curses_main(stdscr):
                 attr = curses.color_pair(1) | curses.A_BOLD if name == installer.config.profile else curses.color_pair(3)
                 stdscr.addstr(8 + i*2, 6, f"  {name}", attr)
                 stdscr.addstr(9 + i*2, 8, f"  {desc}", curses.color_pair(6))
-            stdscr.addstr(h - 4, 4, "GPU Driver: " + installer.config.gpu_driver + " (press 'g' to toggle)", curses.color_pair(6))
+            stdscr.addstr(h - 4, 4, "GPU Driver: Nouveau (included)", curses.color_pair(6))
             stdscr.addstr(h - 5, 4, "Desktop: " + installer.config.desktop_env + " (press 'd' to toggle)", curses.color_pair(6))
         
         elif current_step == InstallStep.USERS:
@@ -710,9 +699,6 @@ def curses_main(stdscr):
             idx = step_order.index(current_step)
             if idx > 0:
                 current_step = step_order[idx - 1]
-        elif key == ord('g'):  # Toggle GPU driver
-            if current_step == InstallStep.PACKAGES:
-                installer.config.gpu_driver = "nvidia-340xx" if installer.config.gpu_driver == "nouveau" else "nouveau"
         elif key == ord('d'):  # Toggle desktop
             if current_step == InstallStep.PACKAGES:
                 options = ["xfce", "i3", "both"]
