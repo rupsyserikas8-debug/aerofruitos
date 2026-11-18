@@ -1,37 +1,29 @@
 # Maintainer: Aerofruitos Team
 pkgname=aerofruitos-gtk-theme
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Frutiger Aero GTK3/4 theme for Aerofruitos'
 arch=(any)
-url='https://github.com/aerofruitos/aerofruitos-gtk-theme'
+url='https://github.com/rupsyserikas8-debug/aerofruitos'
 license=(GPL3)
 depends=('gtk3' 'gtk4')
-makedepends=('git' 'sassc' 'meson')
 optdepends=('kvantum-qt5: Qt5 theme support'
             'kvantum-qt6: Qt6 theme support'
             'qt5ct: Qt5 configuration'
             'qt6ct: Qt6 configuration')
-source=("git+https://github.com/aerofruitos/aerofruitos-gtk-theme.git#tag=v${pkgver}")
-sha256sums=('SKIP')
 
 package() {
-  cd aerofruitos-gtk-theme
-  
   # Install GTK3 theme
-  install -dm755 "$pkgdir"/usr/share/themes/Aerofruitos/gtk-3.0
-  cp -r gtk-3.0/* "$pkgdir"/usr/share/themes/Aerofruitos/gtk-3.0/
+  install -Dm644 "$startdir"/gtk-3.0/gtk.css "$pkgdir"/usr/share/themes/Aerofruitos/gtk-3.0/gtk.css
   
   # Install GTK4 theme
-  install -dm755 "$pkgdir"/usr/share/themes/Aerofruitos/gtk-4.0
-  cp -r gtk-4.0/* "$pkgdir"/usr/share/themes/Aerofruitos/gtk-4.0/
+  install -Dm644 "$startdir"/gtk-4.0/gtk.css "$pkgdir"/usr/share/themes/Aerofruitos/gtk-4.0/gtk.css
   
   # Install metacity/xfwm4 theme
-  install -dm755 "$pkgdir"/usr/share/themes/Aerofruitos/xfwm4
-  cp -r xfwm4/* "$pkgdir"/usr/share/themes/Aerofruitos/xfwm4/
+  install -Dm644 "$startdir"/xfwm4/themerc "$pkgdir"/usr/share/themes/Aerofruitos/xfwm4/themerc
   
   # Install index.theme
-  install -Dm644 index.theme "$pkgdir"/usr/share/themes/Aerofruitos/index.theme
+  install -Dm644 "$startdir"/index.theme "$pkgdir"/usr/share/themes/Aerofruitos/index.theme
   
   # Install GTK settings defaults
   install -dm755 "$pkgdir"/etc/gtk-3.0
