@@ -1,10 +1,10 @@
 # Maintainer: Aerofruitos Team
 pkgname=aerofruitos-cursor-theme
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Frutiger Aero cursor theme for Aerofruitos'
 arch=(any)
-url='https://github.com/aerofruitos/aerofruitos-cursor-theme'
+url='https://github.com/rupsyserikas8-debug/aerofruitos'
 license=(GPL3)
 depends=()
 source=()
@@ -240,9 +240,7 @@ ln -sf wait watch
 ln -sf progress left_ptr_watch
 ln -sf hand pointer
 ln -sf hand2 pointing_hand
-ln -sf move move
 ln -sf not_allowed circle
-ln -sf copy copy
 ln -sf alias link
 ln -sf crosshair cross
 ln -sf n-resize sb_v_double_arrow
@@ -257,10 +255,6 @@ ln -sf ns-resize sb_v_double_arrow
 ln -sf ew-resize sb_h_double_arrow
 ln -sf nwse-resize bd_double_arrow
 ln -sf nesw-resize fd_double_arrow
-ln -sf zoom_in zoom_in
-ln -sf zoom_out zoom_out
-ln -sf help help
-ln -sf context_menu context_menu
 
 echo "Cursor generation complete"
 EOF
@@ -283,9 +277,7 @@ EOF
   ln -sf progress left_ptr_watch
   ln -sf hand pointer
   ln -sf hand2 pointing_hand
-  ln -sf move move
   ln -sf not_allowed circle
-  ln -sf copy copy
   ln -sf alias link
   ln -sf crosshair cross
   ln -sf n-resize sb_v_double_arrow
@@ -300,8 +292,4 @@ EOF
   ln -sf ew-resize sb_h_double_arrow
   ln -sf nwse-resize bd_double_arrow
   ln -sf nesw-resize fd_double_arrow
-  ln -sf zoom_in zoom_in
-  ln -sf zoom_out zoom_out
-  ln -sf help help
-  ln -sf context_menu context_menu
 }
