@@ -1,0 +1,7 @@
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 5cfc4c2..cd1d789 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -230,1 +230,1 @@
+-		 $(basename_flags) $(modname_flags)
++		 $(basename_flags) $(modname_flags) -std=gnu11
