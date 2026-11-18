@@ -1,7 +1,7 @@
 # Maintainer: Aerofruitos Team
 pkgbase=linux-aerofruitos
 pkgver=6.6.52
-pkgrel=3
+pkgrel=4
 pkgdesc='Linux kernel optimized for Aerofruitos (Q6600/GT9600/2GB RAM)'
 arch=(x86_64)
 url='https://kernel.org'
@@ -18,9 +18,10 @@ source=(
   "linux-6.6-ssl-errors.patch::https://github.com/gregkh/linux/commit/f8dafdafddcf5ebf58658e89f8c003217e961e8c.patch"
   "linux-6.6-openssl-provider.patch::https://github.com/gregkh/linux/commit/2eb70f54ad8634b63402bd9bcea8e4ee5af85add.patch"
   "linux-6.6-realmode-gnu11.patch"
+  "linux-6.6-efi-stub-gnu11.patch"
 )
 validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886' '647F28654894E3BD457199BE38DBBDC86092693E')
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 export KBUILD_BUILD_HOST=aerofruitos
 export KBUILD_BUILD_USER=builder
@@ -33,13 +34,15 @@ prepare() {
   patch -Np1 -i "$srcdir/linux-6.6-ssl-errors.patch"
   patch -Np1 -i "$srcdir/linux-6.6-openssl-provider.patch"
   patch -Np1 -i "$srcdir/linux-6.6-realmode-gnu11.patch"
+  patch -Np1 -i "$srcdir/linux-6.6-efi-stub-gnu11.patch"
   make olddefconfig
   make -s kernelrelease > version
 }
 
 build() {
   cd $_srcname
-  make KCFLAGS=-std=gnu11 all
+  export KCFLAGS=-std=gnu11
+  make all
   make -C tools/objtool
 }
 
